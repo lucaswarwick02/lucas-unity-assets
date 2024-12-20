@@ -42,7 +42,7 @@ namespace Arcadian.UI.Transition
             var timer = 0f;
             while (timer < FadeTime)
             {
-                timer += Time.deltaTime * speed;
+                timer += Time.unscaledDeltaTime * speed;
 
                 canvasGroup.alpha = Curves.In.Evaluate(timer / FadeTime);
                 
@@ -51,7 +51,7 @@ namespace Arcadian.UI.Transition
 
             SceneManager.LoadScene(sceneName);
 
-            yield return new WaitForSeconds(0.75f / speed);
+            yield return new WaitForSecondsRealtime(0.75f / speed);
             
             var showText = transitionEffectText.SetTexts(header, body);
 
@@ -59,13 +59,13 @@ namespace Arcadian.UI.Transition
             {
                 transitionEffectText.Open();
 
-                yield return new WaitForSeconds(2f / textSpeed);
+                yield return new WaitForSecondsRealtime(2f / textSpeed);
             }
 
             timer = 0f;
             while (timer < FadeTime)
             {
-                timer += Time.deltaTime * speed;
+                timer += Time.unscaledDeltaTime * speed;
 
                 canvasGroup.alpha = Curves.Out.Evaluate(timer / FadeTime);
                 

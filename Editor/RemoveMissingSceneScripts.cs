@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace Editor
@@ -87,3 +88,4 @@ namespace Editor
         }
     }
 }
+#endif

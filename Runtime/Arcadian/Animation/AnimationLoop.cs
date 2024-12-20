@@ -45,6 +45,15 @@ namespace Arcadian.Animation
             _play = StartCoroutine(PlayCoroutine());
         }
 
+        public void Stop()
+        {
+            if (_play != null)
+            {
+                StopCoroutine(_play);
+                _play = null;
+            }  
+        }
+
         private IEnumerator PlayCoroutine()
         {
             foreach (var t in sprites)
@@ -63,7 +72,7 @@ namespace Arcadian.Animation
             onAnimationFinished?.Invoke();
             
             if (destroyOnFinish) Destroy(gameObject);
-            if (loop) StartCoroutine(PlayCoroutine());
+            if (loop) _play = StartCoroutine(PlayCoroutine());
         }
         
         private void SetSprite(Sprite sprite)

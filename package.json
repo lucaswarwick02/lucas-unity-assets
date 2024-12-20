@@ -14,7 +14,10 @@
     "email": "lucaswarwick02@gmail.com"
   },
   "dependencies": {
+    "com.unity.inputsystem": "1.6.3",
     "com.unity.textmeshpro": "3.0.6",
-    "com.unity.addressables": "1.21.21"
+    "com.unity.addressables": "1.21.21",
+    "com.unity.nuget.newtonsoft-json": "2.0.2",
+    "com.solidalloy.type-references": "2.16.0"
   }
 }
