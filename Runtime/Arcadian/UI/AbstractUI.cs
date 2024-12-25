@@ -1,6 +1,7 @@
 using System.Collections;
 using Arcadian.Sound;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Arcadian.UI
 {
@@ -15,6 +16,7 @@ namespace Arcadian.UI
         [SerializeField] private AbstractUIGroup abstractUIGroup;
         [SerializeField] private SoundEffect openSound;
         [SerializeField] private SoundEffect closeSound;
+        [SerializeField] private bool ignoreScaler;
 
         private const float SizeMultiplier = 1.075f;
         private const float AnimationLength = 0.125f;
@@ -44,6 +46,8 @@ namespace Arcadian.UI
 
         public void SetScaleAndOffsets()
         {
+            if (ignoreScaler) return;
+            
             transform.localScale = GetLocalScale();
             
             // Calculate the adjustment needed to fit the scaled panel
@@ -100,5 +104,9 @@ namespace Arcadian.UI
             transform.localScale = Vector3.one;
             gameObject.SetActive(false);
         }
+
+        protected void OpenAction(InputAction.CallbackContext _) => Open();
+        
+        protected void CloseAction(InputAction.CallbackContext _) => Close();
     }
 }
