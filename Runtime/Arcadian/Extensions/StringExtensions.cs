@@ -69,5 +69,10 @@ namespace Arcadian.Extensions
         public static string Bold(this string text) => $"<b>{text}</b>";
         public static string Strikethrough(this string text) => $"<s>{text}</s>";
         public static string Italic(this string text) => $"<i>{text}</i>";
+
+        public static string GetEmoji(this string asset, string emoji)
+        {
+            return $"<sprite=\"{asset}\" name=\"{emoji}\">";
+        }
     }
 }

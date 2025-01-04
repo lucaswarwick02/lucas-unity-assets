@@ -52,6 +52,8 @@ namespace Arcadian.Extensions
                     return new Vector2Int(x % texture.width, x / texture.width);
                 }
             }
+            
+            Debug.LogError("Could not find the pixel point!");
 
             return Vector2Int.zero;
         }
