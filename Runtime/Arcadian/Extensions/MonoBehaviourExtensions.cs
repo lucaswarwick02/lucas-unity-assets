@@ -17,5 +17,21 @@ namespace Arcadian.Extensions
             
             function?.Invoke();
         }
+
+        public static IEnumerator Progress(this MonoBehaviour monoBehaviour, float duration, Action<float> function)
+        {
+            var timer = 0f;
+
+            while (timer < duration)
+            {
+                function(timer / duration);
+                
+                timer += Time.deltaTime;
+                
+                yield return null;
+            }
+            
+            function(1f);
+        }
     }
 }
