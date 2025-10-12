@@ -6,32 +6,34 @@ namespace Arcadian.Extensions
 {
     public static class MonoBehaviourExtensions
     {
-        public static void RunEndOnFrame(this MonoBehaviour monoBehaviour, Action function)
+        public static void InvokeEndOnFrame(this MonoBehaviour mono, Action action)
         {
-            monoBehaviour.StartCoroutine(DelayedFunction(function));
+            if (mono == null || action == null) return;
+
+            mono.StartCoroutine(InvokeEndOfFrameCoroutine(action));
         }
 
-        private static IEnumerator DelayedFunction(Action function)
+        private static IEnumerator InvokeEndOfFrameCoroutine(Action action)
         {
             yield return new WaitForEndOfFrame();
-            
-            function?.Invoke();
+
+            action();
         }
 
-        public static IEnumerator Progress(this MonoBehaviour monoBehaviour, float duration, Action<float> function)
+        public static IEnumerator RunOverTime(this MonoBehaviour _, float duration, Action<float> onProgress, bool useUnscaledTime = false)
         {
             var timer = 0f;
 
             while (timer < duration)
             {
-                function(timer / duration);
+                onProgress(timer / duration);
                 
-                timer += Time.deltaTime;
+                timer += useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
                 
                 yield return null;
             }
             
-            function(1f);
+            onProgress(1f);
         }
     }
 }

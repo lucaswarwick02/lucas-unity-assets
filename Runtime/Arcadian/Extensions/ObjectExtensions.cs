@@ -1,43 +1,26 @@
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Arcadian.Extensions
 {
     /// <summary>
-    /// A class that contains methods for handling objects.
+    /// A set of extension methods for </c>GameObject</c> and <c>Object</c>, providing easy access to child components and deep cloning. Useful for quickly finding nested components or duplicating objects without manually copying fields. 
     /// </summary>
     public static class ObjectExtensions
     {
-        /// <summary>
-        /// Gets the first component of type T in the child object.
-        /// </summary>
-        /// <param name="gameObject">Original game object being queried</param>
-        /// <param name="childName">Name of the child object</param>
-        /// <typeparam name="T">Component type</typeparam>
-        /// <returns>Component</returns>
-        public static T GetChildComponent<T>(this GameObject gameObject, string childName)
-        where T : Component
+        public static T GetChildComponent<T>(this GameObject gameObject, string childName) where T : Component
         {
-            var childObject = gameObject.transform.Find(childName);
-            return childObject.GetComponent<T>();
+            if (!gameObject || string.IsNullOrEmpty(childName)) return null;
+
+            var child = gameObject.transform.Find(childName);
+            return child ? child.GetComponent<T>() : null;
         }
 
-        /// <summary>
-        /// Deep clones an object.
-        /// </summary>
-        /// <param name="obj">object to clone</param>
-        /// <typeparam name="T">Type of the object</typeparam>
-        /// <returns>Deep Clone of the object</returns>
         public static T DeepClone<T>(this T obj)
         {
-            using var ms = new MemoryStream();
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(ms, obj);
-            ms.Position = 0;
+            if (obj == null) return default;
 
-            return (T)formatter.Deserialize(ms);
+            var json = JsonUtility.ToJson(obj);
+            return JsonUtility.FromJson<T>(json);
         }
     }
 }

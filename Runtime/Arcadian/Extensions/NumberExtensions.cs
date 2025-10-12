@@ -1,35 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Text;
 
 namespace Arcadian.Extensions
 {
     public static class NumberExtensions
     {
+        private static readonly (int value, string symbol)[] RomanMap =
+        {
+            (1000, "M"), (900, "CM"), (500, "D"), (400, "CD"),
+            (100, "C"), (90, "XC"), (50, "L"), (40, "XL"),
+            (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")
+        };
+
         public static string ToRoman(this int num)
         {
             if (num is < 1 or > 3999)
-            {
-                throw new ArgumentOutOfRangeException(nameof(num), "Input should be between 1 and 3999.");
-            }
+                throw new ArgumentOutOfRangeException(nameof(num), "Value must be between 1 and 3999.");
 
-            var romanDict = new Dictionary<int, string>
-            {
-                {1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
-                {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"},
-                {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}
-            };
+            var sb = new StringBuilder();
 
-            var roman = "";
-            foreach (var kvp in romanDict)
+            foreach (var (value, symbol) in RomanMap)
             {
-                while (num >= kvp.Key)
+                while (num >= value)
                 {
-                    roman += kvp.Value;
-                    num -= kvp.Key;
+                    sb.Append(symbol);
+                    num -= value;
                 }
             }
 
-            return roman;
+            return sb.ToString();
         }
     }
 }

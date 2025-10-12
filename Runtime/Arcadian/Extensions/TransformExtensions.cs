@@ -3,23 +3,30 @@ using UnityEngine;
 
 namespace Arcadian.Extensions
 {
+    /// <summary>
+    /// A <c>Transform</c> extension method to find the closest <c>MonoBehaviour</c> from a list. Useful for targetting the nearest object, enemy, or interactive element efficiently without repeatedly calculating distances manually. 
+    /// </summary>
     public static class TransformExtensions
     {
         public static T GetClosest<T>(this Transform transform, List<T> monoBehaviours) where T : MonoBehaviour
         {
-            T closestTransform = null;
-            var closestDistance = Mathf.Infinity;
+            T closest = null;
+            float closestDistSqr = Mathf.Infinity;
+            Vector3 pos = transform.position;
 
-            foreach (var monoBehaviour in monoBehaviours)
+            for (int i = 0; i < monoBehaviours.Count; i++)
             {
-                var distance = Vector3.Distance(monoBehaviour.transform.position, transform.position);
-                if (!(distance < closestDistance)) continue;
-                
-                closestTransform = monoBehaviour;
-                closestDistance = distance;
+                var mb = monoBehaviours[i];
+                float distSqr = (mb.transform.position - pos).sqrMagnitude;
+
+                if (distSqr < closestDistSqr)
+                {
+                    closest = mb;
+                    closestDistSqr = distSqr;
+                }
             }
 
-            return closestTransform;
+            return closest;
         }
     }
 }

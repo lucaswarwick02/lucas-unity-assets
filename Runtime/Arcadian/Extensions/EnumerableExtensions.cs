@@ -23,27 +23,28 @@ namespace Arcadian.Extensions
             }
         }
 
-        public static T Random<T>(this T[] choices)
+        public static T Random<T>(this IReadOnlyList<T> choices)
         {
             return Random(choices, _ => 1);
         }
 
-        public static T Random<T>(this T[] items, Func<T, float> weight)
+        public static T Random<T>(this IReadOnlyList<T> items, Func<T, float> weight)
         {
-            var totalWeight = items.Sum(weight);
-            var randomNumber = UnityEngine.Random.Range(0f, totalWeight);
+            if (items == null || items.Count == 0)
+                throw new ArgumentException("Items collection is empty.", nameof(items));
 
+            float total = 0;
+            foreach (var item in items) total += weight(item);
+
+            float pick = UnityEngine.Random.Range(0f, total);
             foreach (var item in items)
             {
-                if (randomNumber < weight(item))
-                {
+                float w = weight(item);
+                if (pick < w)
                     return item;
-                }
-
-                randomNumber -= weight(item);
+                pick -= w;
             }
-
-            return items.Last();
+            return items[items.Count - 1];
         }
     }
 }

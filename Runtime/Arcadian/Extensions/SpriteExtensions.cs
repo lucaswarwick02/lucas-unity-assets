@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Arcadian.Extensions
 {
+    /// <summary>
+    /// A set of extension methods for <c>Sprite</c> to manipulate pivots, locate pixels by color, covert pixel positions to UV offsets, an dremove specific pixel colors. Useful for dynamically adjusting sprite origins, detecting color positions, or creating modified textures at runtime.
+    /// </summary>
     public static class SpriteExtensions
     {
-        public const float PixelsPerUnit = 16f;
         public static readonly Vector2 PivotCenter = new(0.5f, 0.5f);
-        
+
         /// <summary>
         /// Centers the pivot of a sprite
         /// </summary>
@@ -15,19 +18,7 @@ namespace Arcadian.Extensions
         public static Sprite CenterSprite(this Sprite sprite)
         {
             var texture = sprite.texture;
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), PivotCenter, 16);
-        }
-        
-        public static Texture2D GetSubTexture(Texture2D texture, Rect rect)
-        {
-            var subTexture = new Texture2D((int)rect.width, (int)rect.height)
-            {
-                filterMode = texture.filterMode
-            };
-            var pixels = texture.GetPixels((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height);
-            subTexture.SetPixels(pixels);
-            subTexture.Apply();
-            return subTexture;
+            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), PivotCenter, sprite.pixelsPerUnit);
         }
 
         public static Vector2 CalculatePivot(Sprite sprite)
@@ -38,53 +29,69 @@ namespace Arcadian.Extensions
 
             return new Vector2(pivotX, pivotY);
         }
-        
-        public static Vector2Int GetPixelPoint(this Sprite sprite, Color32 pixelColor)
-        {
-            var texture = GetSubTexture(sprite.texture, sprite.textureRect);
-            var pixels = texture.GetPixels32();
 
-            for (int x = 0, length = pixels.Length; x < length; x++)
+        public static Vector2Int GetPixelPoint(this Sprite sprite, Color32 color)
+        {
+            var rect = sprite.textureRect;
+            var pixels = sprite.texture.GetPixels32();
+            int texWidth = sprite.texture.width;
+
+            for (int y = 0; y < (int)rect.height; y++)
             {
-                var pixel = pixels[x];
-                if (pixel.r == pixelColor.r && pixel.g == pixelColor.g && pixel.b == pixelColor.b && pixel.a == pixelColor.a)
+                int rowOffset = ((int)rect.y + y) * texWidth + (int)rect.x;
+                for (int x = 0; x < (int)rect.width; x++)
                 {
-                    return new Vector2Int(x % texture.width, x / texture.width);
+                    if (pixels[rowOffset + x].Equals(color)) return new Vector2Int(x, y);
                 }
             }
-            
-            Debug.LogError("Could not find the pixel point!");
 
+            Debug.LogError("Could not find the pixel point!");
             return Vector2Int.zero;
         }
-        
+
         public static Vector2 PixelPointToOffset(this Sprite sprite, Vector2Int pixelPoint)
         {
-            var texture = GetSubTexture(sprite.texture, sprite.textureRect);
-            var offset = new Vector2(
-                (float)pixelPoint.x / texture.width,
-                (float)pixelPoint.y / texture.height);
-
-            return offset;
+            var rect = sprite.textureRect;
+            return new Vector2(
+                (pixelPoint.x + rect.x) / rect.width,
+                (pixelPoint.y + rect.y) / rect.height
+            );
         }
 
-        public static Sprite RemovePixelPoints(this Sprite sprite, params Color32[] pixelColors)
+        public static Sprite RemovePixelPoints(this Sprite sprite, params Color32[] colors)
         {
-            var originalTexture = GetSubTexture(sprite.texture, sprite.textureRect);
-            var pixels = originalTexture.GetPixels32();
+            var rect = sprite.textureRect;
+            var texPixels = sprite.texture.GetPixels32();
+            int texWidth = sprite.texture.width;
+            int width = (int)rect.width, height = (int)rect.height;
 
-            foreach (var pixelColor in pixelColors)
+            var pixels = new Color32[width * height];
+            for (int y = 0; y < height; y++)
             {
-                var pixelPoint = sprite.GetPixelPoint(pixelColor);
-                pixels[pixelPoint.y * originalTexture.width + pixelPoint.x] = Color.clear;
+                Array.Copy(texPixels, ((int)rect.y + y) * texWidth + (int)rect.x, pixels, y * width, width);
             }
 
-            originalTexture.SetPixels32(pixels);
-            originalTexture.Apply();
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                foreach (var c in colors)
+                {
+                    if (pixels[i].Equals(c))
+                    {
+                        pixels[i] = Color.clear;
+                        break;
+                    }
+                }
+            }
 
-            var pivot = CalculatePivot(sprite);
+            var newTexture = new Texture2D(width, height)
+            {
+                filterMode = sprite.texture.filterMode
+            };
+            newTexture.SetPixels32(pixels);
+            newTexture.Apply();
 
-            return Sprite.Create(originalTexture, new Rect(0, 0, originalTexture.width, originalTexture.height), pivot, 16);
+            var pivot = new Vector2(sprite.pivot.x / rect.width, sprite.pivot.y / rect.height);
+            return Sprite.Create(newTexture, new Rect(0, 0, width, height), pivot, sprite.pixelsPerUnit);
         }
     }
 }
