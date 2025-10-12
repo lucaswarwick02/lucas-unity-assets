@@ -10,13 +10,14 @@ namespace Arcadian.Animation
     /// </summary>
     public class AnimationSet : MonoBehaviour
     {
-        public SpriteRenderer spriteRenderer;
-        public Image image;
-        public bool useImage;
+        public Component target;
+
         public string defaultAnimation;
         public AnimationState[] animationStates;
         public float frameDelay = 0.125f;
+
         public bool playOnStart = true;
+        public bool useUnscaledTime;
 
         public event Action onFrameChange;
         
@@ -25,11 +26,23 @@ namespace Arcadian.Animation
         
         public AnimationState CurrentAnimation { get; private set; }
         public int CurrentFrame { get; private set; }
+        
+        public Component Target
+        {
+            get => target;
+            set
+            {
+                if (value is SpriteRenderer || value is Image || value == null)
+                {
+                    target = value;
+                }
+            }
+        }
 
         private void Start()
         {
             if (!string.IsNullOrEmpty(defaultAnimation)) SetAnimation(defaultAnimation);
-            
+
             if (playOnStart) StartAnimation();
         }
 
@@ -73,7 +86,7 @@ namespace Arcadian.Animation
         {
             if (!_isPlaying) return;
             
-            _timer += useImage ? Time.unscaledDeltaTime : Time.deltaTime;
+            _timer += useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
             if (_timer < frameDelay) return;
 
             _timer = 0;
@@ -87,14 +100,8 @@ namespace Arcadian.Animation
             CurrentFrame++;
             if (CurrentFrame >= CurrentAnimation.sprites.Length) CurrentFrame = 0;
 
-            if (useImage)
-            {
-                image.sprite = CurrentAnimation.sprites[CurrentFrame];
-            }
-            else
-            {
-                spriteRenderer.sprite = CurrentAnimation.sprites[CurrentFrame];
-            }
+            if (target is SpriteRenderer sp) sp.sprite = CurrentAnimation.sprites[CurrentFrame];
+            if (target is Image img) img.sprite = CurrentAnimation.sprites[CurrentFrame];
             
             onFrameChange?.Invoke();
         }

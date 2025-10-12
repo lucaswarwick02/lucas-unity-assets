@@ -66,3 +66,39 @@ public class Example : MonoBehaviour
 }
 
 ```
+
+`AnimationSet`
+
+A reusable Unity component for managing multiple animtaions on a `SpriteRenderer` or `UI.Image`. Useful for switching between named animation states (like character animations, UI transisitons, or effects) with lightweight, scriptable control over frame timing, looping, and automatic frame updates.
+
+Example Usage:
+```c#
+using Arcadian.Animation;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Example : MonoBehaviour
+{
+    public AnimationSet animationSet;
+
+    void Start()
+    {
+        // Set default animation
+        animationSet.SetAnimation("Idle");
+
+        // Start animation playback
+        animationSet.StartAnimation();
+
+        // Subscribe to frame changes
+        animationSet.onFrameChange += () => Debug.Log($"Frame changed: {animationSet.CurrentFrame}");
+    }
+
+    void Update()
+    {
+        // Switch animation on key press
+        if (Input.GetKeyDown(KeyCode.Space))
+            animationSet.SetAnimation("Run");
+    }
+}
+
+```
