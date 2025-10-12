@@ -10,7 +10,7 @@ using UnityEditor;
 namespace Arcadian.Animation
 {
     /// <summary>
-    /// Contains a single animation and loops it.
+    /// A reusable Unity component for quickly animating a sequence of sprites on a <c>SpriteRenderer</c> or <c>UI.Image</c>. Useful for creating looping or one-off animations (like effect, UI icons, or simple character aniamtions) without needing an Animator Controller, giving lightweight, scriptable control over timing, looping, and destruction on completion.
     /// </summary>
     public class AnimationLoop : MonoBehaviour
     {

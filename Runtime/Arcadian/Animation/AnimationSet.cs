@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Arcadian.Animation
 {
     /// <summary>
-    /// Handles a set of animation for a GameObject.
+    /// A reusable Unity component for managing multiple animtaions on a <c>SpriteRenderer</c> or <c>UI.Image</c>. Useful for switching between named animation states (like character animations, UI transisitons, or effects) with lightweight, scriptable control over frame timing, looping, and automatic frame updates.
     /// </summary>
     public class AnimationSet : MonoBehaviour
     {
