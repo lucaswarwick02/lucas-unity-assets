@@ -31,7 +31,9 @@ A colelction of shared Unity tools and utilities for internal projects.
 ### Table of Contents
 
 Below is a list of the different submodules:
-- [Animation](#animation)
+- [Animation](#animation) (`AnimationLoop`, `AnimationSet`)
+- [Effects](#effects) (`Pulse`)
+- [Enums](#enums) (`Direction2D`)
 
 ### Animation
 
@@ -128,6 +130,27 @@ public class Example : MonoBehaviour
         // Disable pulsing on key press
         if (Input.GetKeyDown(KeyCode.Space))
             pulseEffect.enabled = false;
+    }
+}
+```
+
+### Enums
+
+`Direction2D`
+A simple enum representing 2D directions (`Up`, `Down`, `Left`, `Right`) with an extension to covnert a `Vector2D` into the closest `Direction2D`. Useful for interpreting movement or input vectors in a grid or direction based system.
+
+Example Usage:
+```c#
+using Arcadian.Enums;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    void Update()
+    {
+        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Direction2D direction = input.ToDirection2D();
+        Debug.Log($"Current direction: {direction}");
     }
 }
 ```
