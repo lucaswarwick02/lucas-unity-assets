@@ -5,6 +5,10 @@ using Random = UnityEngine.Random;
 
 namespace Arcadian.GameObjects
 {
+    /// <summary>
+    /// A reusable Unity component for smoothly following a target (e.g., player) with damping and optional screen shake. Useful for creating dynamic, responsive camera mothion that feels natural while maintaining focus on the target.
+    /// </summary>
+    [DisallowMultipleComponent]
     public class SmoothCameraFollow : MonoBehaviour
     {
         private static SmoothCameraFollow _instance;
@@ -23,6 +27,13 @@ namespace Arcadian.GameObjects
 
         private void Awake()
         {
+            if (_instance && _instance != this)
+            {
+                Debug.LogWarning("Multiple SmoothCameraFollow instances found. Destroying duplicate");
+                Destroy(_instance);
+                return;
+            }
+
             _instance = this;
         }
 
