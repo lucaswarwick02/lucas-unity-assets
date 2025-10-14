@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Arcadian.Extensions
 {
     /// <summary>
-    /// A set of extension methods for </c>GameObject</c> and <c>Object</c>, providing easy access to child components and deep cloning. Useful for quickly finding nested components or duplicating objects without manually copying fields. 
+    /// A set of extension methods for <c>GameObject</c> and <c>Object</c>, providing easy access to child components and deep cloning. Useful for quickly finding nested components or duplicating objects without manually copying fields. 
     /// </summary>
     public static class ObjectExtensions
     {
