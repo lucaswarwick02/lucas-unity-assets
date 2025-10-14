@@ -3,7 +3,7 @@
 namespace Arcadian.Maths
 {
     /// <summary>
-    /// Used to store animation curves for use in animations.
+    /// A lightweight static helper providing reusable Unity <c>AnimationCurve</c> presets for common "ease in" and "ease out" transitions. Useful for animations, UI effects, or smooth value interpolation without manually defining curves each time.
     /// </summary>
     public static class Curves
     {
