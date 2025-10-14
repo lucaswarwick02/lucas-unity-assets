@@ -55,7 +55,7 @@ namespace Arcadian.Generic
     /// </summary>
     public class Applicator
     {
-        private readonly List<Action> _functions = [];
+        private readonly List<Action> _functions = new();
 
         /// <summary>
         /// Current number of added functions.
