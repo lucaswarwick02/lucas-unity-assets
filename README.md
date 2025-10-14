@@ -32,78 +32,19 @@ Below is a list of the different submodules:
 
 > [WIP] Items in this list have been added, but not fully documented yet.
 
-- [x] [Animation](Runtime/Arcadian/Animation/README.md) (`AnimationLoop`, `AnimationGroup`)
-- [x] [Effects](Runtime/Arcadian/Effects/README.md) (`Pulse`)
-- [x] [Enums](Runtime/Arcadian/Enums/README.md) (`Direction2D`)
-- [x] [Extensions](Runtime/Arcadian/Extensions/README.md)  (`Color`, `Enumerable`, `MonoBehaviour`, `Number`, `Object`, `Sprite`, `String`, `Transform`, `TypeReference`, `Vector`)
-- [ ] [GameObjects](#gameobjects) (`SmoothCameraFollow`, `UnityEventHook`)
-- [ ] [Generic](#generic) (`Applicator`, `Ref`)
-- [ ] [Maths](#maths) (`Curves`)
-- [ ] [Pathfinding]
-- [ ] [Shaders]
-- [ ] [Sound]
-- [ ] [StateManagement]
-- [ ] [System]
-- [ ] [UI]
-
-### GameObjects
-
-`SmoothCameraFollow`
-
-
-A reusable Unity component for smoothly following a target (e.g., player) with damping and optional screen shake. Useful for creating dynamic, responsive camera motion that feels natural while maintaining focus on the target.
-
-Example Usage:
-```c#
-using Arcadian.GameObjects;
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    public SmoothCameraFollow cameraFollow;
-    public Transform player;
-
-    void Start()
-    {
-        // Assign player as the camera target
-        cameraFollow.target = player;
-
-        // Offset camera slightly behind and above the player
-        cameraFollow.offset = new Vector3(0, 2, -10);
-    }
-
-    void Update()
-    {
-        // Trigger a medium shake for 0.5 seconds when pressing space
-        if (Input.GetKeyDown(KeyCode.Space))
-            SmoothCameraFollow.Shake(ShakeStrength.Medium, 0.5f);
-    }
-}
-```
-
-`UnityEventHooks`
-
-A reusable Unity component that exposes UnityEvents for common MonoBehaviour lifecycle hooks (`Awake`, `OnEnable`, `OnDisable`). Useful for triggering actions directly in the inspector without writing boilerplate code.
-
-Example Usage:
-```c#
-using Arcadian.GameObjects;
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    public UnityEventHooks eventHooks;
-
-    void Start()
-    {
-        // In the Inspector, link functions to lifecycle events:
-        // - OnAwake → Initialise game data
-        // - OnStart → Spawn player
-        // - OnEnableEvent → Enable HUD
-        // - OnDisableEvent → Save progress
-    }
-}
-```
+- [Animation](Runtime/Arcadian/Animation/README.md) (`AnimationLoop`, `AnimationGroup`)
+- [Effects](Runtime/Arcadian/Effects/README.md) (`Pulse`)
+- [Enums](Runtime/Arcadian/Enums/README.md) (`Direction2D`)
+- [Extensions](Runtime/Arcadian/Extensions/README.md)  (`Color`, `Enumerable`, `MonoBehaviour`, `Number`, `Object`, `Sprite`, `String`, `Transform`, `TypeReference`, `Vector`)
+- [GameObjects](Runtime/Arcadian/GameObjects/README.md) (`SmoothCameraFollow`, `UnityEventHook`)
+- [Generic](#generic) (`Applicator`, `Ref`)
+- [Maths](#maths) (`Curves`)
+- Pathfinding
+- Shaders
+- Sound
+- StateManagement
+- System
+- UI
 
 ### Generic
 

@@ -6,20 +6,42 @@ using Random = UnityEngine.Random;
 namespace Arcadian.GameObjects
 {
     /// <summary>
-    /// A reusable Unity component for smoothly following a target (e.g., player) with damping and optional screen shake. Useful for creating dynamic, responsive camera mothion that feels natural while maintaining focus on the target.
+    /// A reusable Unity component for smoothly following a target (e.g., player) with damping and optional screen shake. Useful for creating dynamic, responsive camera motion that feels natural while maintaining focus on the target.
     /// </summary>
     [DisallowMultipleComponent]
     public class SmoothCameraFollow : MonoBehaviour
     {
         private static SmoothCameraFollow _instance;
-        
-        public Transform target; // The player's transform
-        public Vector3 offset; // Offset from the player
+
+        /// <summary>
+        /// Target transform to follow.
+        /// </summary>
+        public Transform target;
+
+        /// <summary>
+        /// Offset to use from the target.
+        /// </summary>
+        public Vector3 offset;
+
+        /// <summary>
+        /// If true, ignores following the z-axis.
+        /// </summary>
         public bool ignoreZ = true;
-        
+
+        /// <summary>
+        /// The time it takes to smooth.
+        /// </summary>
         public float smoothTime = 0.3f;
-        public float maxDistance = 10f; // Maximum distance from target
-        public float speedMultiplier = 2f; // Speed multiplier when far from target
+
+        /// <summary>
+        /// Maximum distance to delay behind the target.
+        /// </summary>
+        public float maxDistance = 10f;
+
+        /// <summary>
+        /// Speed multiplier when far from target.
+        /// </summary>
+        public float speedMultiplier = 2f;
 
         private Vector3 _velocity = Vector3.zero;
         private Vector3 _originalPosition;
@@ -41,7 +63,7 @@ namespace Arcadian.GameObjects
         {
             // Only move the camera if we aren't shaking
             // if (_isShaking) return;
-            
+
             var targetPosition = target.position + offset;
             var currentPosition = transform.position;
 
@@ -57,7 +79,7 @@ namespace Arcadian.GameObjects
 
             // Calculate new position
             var newPos = Vector3.SmoothDamp(currentPosition, targetPosition, ref _velocity, adjustedSmoothTime);
-            
+
             // Clamp to max distance if needed
             if (distance > maxDistance)
             {
@@ -73,6 +95,11 @@ namespace Arcadian.GameObjects
             transform.position = newPos;
         }
 
+        /// <summary>
+        /// Shake the camera.
+        /// </summary>
+        /// <param name="shakeStrength">Strength enumerator.</param>
+        /// <param name="duration">Time to shake for.</param>
         public static void Shake(ShakeStrength shakeStrength, float duration)
         {
             if (_instance._isShaking) return;
@@ -91,7 +118,7 @@ namespace Arcadian.GameObjects
                 var x = Random.Range(-1f, 1f) * GetShakeIntensity(shakeStrength);
                 var y = Random.Range(-1f, 1f) * GetShakeIntensity(shakeStrength);
 
-                transform.localPosition += new Vector3(x,  y, 0);
+                transform.localPosition += new Vector3(x, y, 0);
 
                 elapsed += Time.deltaTime;
 
@@ -100,7 +127,7 @@ namespace Arcadian.GameObjects
 
             _isShaking = false;
         }
-        
+
         private static float GetShakeIntensity(ShakeStrength strength)
         {
             return strength switch
@@ -113,6 +140,9 @@ namespace Arcadian.GameObjects
         }
     }
     
+    /// <summary>
+    /// Strength values to shake by.
+    /// </summary>
     public enum ShakeStrength
     {
         Low,

@@ -8,9 +8,24 @@ namespace Arcadian.GameObjects
     /// </summary>
     public class UnityEventHooks : MonoBehaviour
     {
+        /// <summary>
+        /// Event triggered on Unity Awake().
+        /// </summary>
         public UnityEvent OnAwake;
+
+        /// <summary>
+        /// Event triggered on Unity Start().
+        /// </summary>
         public UnityEvent OnStart;
+
+        /// <summary>
+        /// Event triggered on Unity OnEnable().
+        /// </summary>
         public UnityEvent OnEnableEvent;
+
+        /// <summary>
+        /// Event triggered on Unity OnDisable().
+        /// </summary>
         public UnityEvent OnDisableEvent;
 
         private void Awake() => OnAwake?.Invoke();
