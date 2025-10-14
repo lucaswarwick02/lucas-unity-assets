@@ -5,8 +5,13 @@ namespace Arcadian.Generic
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="value"></param>
-    public struct Ref<T>(T value)
+    public class Ref<T>
     {
-        public T Value { get; set; } = value;
+        public T Value { get; set; }
+
+        public Ref(T value)
+        {
+            Value = value;
+        }
     }
 }
