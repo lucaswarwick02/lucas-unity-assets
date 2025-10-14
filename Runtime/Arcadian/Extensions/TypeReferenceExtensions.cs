@@ -8,6 +8,12 @@ namespace Arcadian.Extensions
     /// </summary>
     public static class TypeReferenceExtensions
     {
+        /// <summary>
+        /// Create an instance of a TypeReference, assuming no constructor arguments.
+        /// </summary>
+        /// <typeparam name="T">Type of object to create</typeparam>
+        /// <param name="typeReference">Type to cast to</param>
+        /// <returns>Created object.</returns>
         public static T Cast<T>(this TypeReference typeReference)
         {
             return (T)Activator.CreateInstance(typeReference);

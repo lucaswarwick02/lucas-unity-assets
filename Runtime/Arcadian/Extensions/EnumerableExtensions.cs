@@ -23,11 +23,25 @@ namespace Arcadian.Extensions
             }
         }
 
+        /// <summary>
+        /// Pick a random item from a list. Assumes uniform weighting.
+        /// </summary>
+        /// <typeparam name="T">Type of object to return.</typeparam>
+        /// <param name="choices">List of choices to pick from.</param>
+        /// <returns>A random item from the provided list.</returns>
         public static T Random<T>(this IReadOnlyList<T> choices)
         {
             return Random(choices, _ => 1);
         }
 
+        /// <summary>
+        /// Pick a random item from a list, where each item is weighted.
+        /// </summary>
+        /// <typeparam name="T">Type of object to return.</typeparam>
+        /// <param name="items">List of choices to pick from.</param>
+        /// <param name="weight">Function to map an object to it's desired weight.</param>
+        /// <returns>A random (weighted) item from the provided list.</returns>
+        /// <exception cref="ArgumentException">Thrown if the collection is empty.</exception>
         public static T Random<T>(this IReadOnlyList<T> items, Func<T, float> weight)
         {
             if (items == null || items.Count == 0)

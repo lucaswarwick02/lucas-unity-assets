@@ -8,6 +8,13 @@ namespace Arcadian.Extensions
     /// </summary>
     public static class TransformExtensions
     {
+        /// <summary>
+        /// Find the closest GameObject based on distance from the target.
+        /// </summary>
+        /// <typeparam name="T">Type of component to iterate over.</typeparam>
+        /// <param name="transform">Main Transform we are comparing against.</param>
+        /// <param name="monoBehaviours">List of entities to compare to.</param>
+        /// <returns>The closest entity.</returns>
         public static T GetClosest<T>(this Transform transform, List<T> monoBehaviours) where T : MonoBehaviour
         {
             T closest = null;
