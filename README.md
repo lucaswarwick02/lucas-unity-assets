@@ -31,13 +31,20 @@ A colelction of shared Unity tools and utilities for internal projects.
 ### Table of Contents
 
 Below is a list of the different submodules:
-- [Animation](#animation) (`AnimationLoop`, `AnimationSet`)
-- [Effects](#effects) (`Pulse`)
-- [Enums](#enums) (`Direction2D`)
-- [Extensions](#extensions)  (`Color`, `Enumerable`, `MonoBehaviour`, `Number`, `Object`, `Sprite`, `String`, `Transform`, `TypeReference`, `Vector`)
-- [GameObjects](#gameobjects) (`SmoothCameraFollow`, `UnityEventHook`)
-- [Generic](#generic) (`Applicator`, `Ref`)
-- [Maths](#maths) (`Curves`)
+
+- [x] [Animation](#animation) (`AnimationLoop`, `AnimationSet`)
+- [x] [Effects](#effects) (`Pulse`)
+- [x] [Enums](#enums) (`Direction2D`)
+- [x] [Extensions](#extensions)  (`Color`, `Enumerable`, `MonoBehaviour`, `Number`, `Object`, `Sprite`, `String`, `Transform`, `TypeReference`, `Vector`)
+- [x] [GameObjects](#gameobjects) (`SmoothCameraFollow`, `UnityEventHook`)
+- [x] [Generic](#generic) (`Applicator`, `Ref`)
+- [x] [Maths](#maths) (`Curves`)
+- [ ] [Pathfinding]
+- [ ] [Shaders]
+- [ ] [Sound]
+- [ ] [StateManagement]
+- [ ] [System]
+- [ ] [UI]
 
 ### Animation
 
