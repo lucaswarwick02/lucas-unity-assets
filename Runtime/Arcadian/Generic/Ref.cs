@@ -7,8 +7,15 @@ namespace Arcadian.Generic
     /// <param name="value"></param>
     public class Ref<T>
     {
+        /// <summary>
+        /// Value to store.
+        /// </summary>
         public T Value { get; set; }
 
+        /// <summary>
+        /// Store the value in the object.
+        /// </summary>
+        /// <param name="value">Value to store.</param>
         public Ref(T value)
         {
             Value = value;
