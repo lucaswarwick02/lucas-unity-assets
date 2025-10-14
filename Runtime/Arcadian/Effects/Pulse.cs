@@ -8,8 +8,15 @@ namespace Arcadian.Effects
     /// </summary>
     public class Pulse : MonoBehaviour
     {
-        [SerializeField] private float speed = 5;
-        [SerializeField] private float scale = 1.15f;
+        /// <summary>
+        /// The speed multiplier to in the oscillation calculation.
+        /// </summary>
+        public float speed = 5;
+
+        /// <summary>
+        /// The max scale to increase the size by.
+        /// </summary>
+        public float scale = 1.15f;
 
         private void Update()
         {

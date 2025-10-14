@@ -33,7 +33,7 @@ Below is a list of the different submodules:
 > [WIP] Items in this list have been added, but not fully documented yet.
 
 - [x] [Animation](Runtime/Arcadian/Animation/README.md) (`AnimationLoop`, `AnimationGroup`)
-- [ ] [Effects](#effects) (`Pulse`)
+- [x] [Effects](Runtime/Arcadian/Effects/README.md) (`Pulse`)
 - [ ] [Enums](#enums) (`Direction2D`)
 - [ ] [Extensions](#extensions)  (`Color`, `Enumerable`, `MonoBehaviour`, `Number`, `Object`, `Sprite`, `String`, `Transform`, `TypeReference`, `Vector`)
 - [ ] [GameObjects](#gameobjects) (`SmoothCameraFollow`, `UnityEventHook`)
@@ -45,36 +45,6 @@ Below is a list of the different submodules:
 - [ ] [StateManagement]
 - [ ] [System]
 - [ ] [UI]
-
-### Effects
-
-`Pulse`
-
-A simple Unity component that makes a GameObject smoothly pulse in size. Useful for drawing attention to UI elements or objects with a looping, easing-based scale effect.
-
-Example Usage:
-```c#
-using Arcadian.Effects;
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    public Pulse pulseEffect;
-
-    void Start()
-    {
-        // Enable pulsing
-        pulseEffect.enabled = true;
-    }
-
-    void Update()
-    {
-        // Disable pulsing on key press
-        if (Input.GetKeyDown(KeyCode.Space))
-            pulseEffect.enabled = false;
-    }
-}
-```
 
 ### Enums
 
