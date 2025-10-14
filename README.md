@@ -34,7 +34,7 @@ Below is a list of the different submodules:
 
 - [x] [Animation](Runtime/Arcadian/Animation/README.md) (`AnimationLoop`, `AnimationGroup`)
 - [x] [Effects](Runtime/Arcadian/Effects/README.md) (`Pulse`)
-- [ ] [Enums](#enums) (`Direction2D`)
+- [x] [Enums](Runtime/Arcadian/Enums/README.md) (`Direction2D`)
 - [ ] [Extensions](#extensions)  (`Color`, `Enumerable`, `MonoBehaviour`, `Number`, `Object`, `Sprite`, `String`, `Transform`, `TypeReference`, `Vector`)
 - [ ] [GameObjects](#gameobjects) (`SmoothCameraFollow`, `UnityEventHook`)
 - [ ] [Generic](#generic) (`Applicator`, `Ref`)
@@ -45,28 +45,6 @@ Below is a list of the different submodules:
 - [ ] [StateManagement]
 - [ ] [System]
 - [ ] [UI]
-
-### Enums
-
-`Direction2D`
-
-A simple enum representing 2D directions (`Up`, `Down`, `Left`, `Right`) with an extension to convert a `Vector2D` into the closest `Direction2D`. Useful for interpreting movement or input vectors in a grid or direction based system.
-
-Example Usage:
-```c#
-using Arcadian.Enums;
-using UnityEngine;
-
-public class Example : MonoBehaviour
-{
-    void Update()
-    {
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        Direction2D direction = input.ToDirection2D();
-        Debug.Log($"Current direction: {direction}");
-    }
-}
-```
 
 ### Extensions
 

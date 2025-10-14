@@ -1,6 +1,6 @@
 # Effects
 
-> Click [here](../../../README.md) to go back.
+> Click [here](../../../README.md#features) to go back.
 
 ## `Pulse`
 
