@@ -1,8 +1,10 @@
 # Animation
 
+> Click [here](../../../README.md) to go back.
+
 `AnimationLoop`
 
-A reusable Unity component for quickly animating a sequence of sprites on a `SpriteRenderer` or `UI.Image`. Useful for creating looping or one-off animations (like effect, UI icons, or simple character aniamtions) without needing an Animator Controller, giving lightweight, scriptable control over timing, looping, and destruction on completion.
+A reusable Unity component for quickly animating a sequence of sprites on a `SpriteRenderer` or `UI.Image`. Useful for creating looping or one-off animations (like effect, UI icons, or simple character animations) without needing an Animator Controller, giving lightweight, scriptable control over timing, looping, and destruction on completion.
 
 Example Usage:
 ```c#
@@ -34,7 +36,7 @@ public class Example : MonoBehaviour
 
 `AnimationSet`
 
-A reusable Unity component for managing multiple animtaions on a `SpriteRenderer` or `UI.Image`. Useful for switching between named animation states (like character animations, UI transisitons, or effects) with lightweight, scriptable control over frame timing, looping, and automatic frame updates.
+A reusable Unity component for managing multiple animations on a `SpriteRenderer` or `UI.Image`. Useful for switching between named animation states (like character animations, UI transitions, or effects) with lightweight, scriptable control over frame timing, looping, and automatic frame updates.
 
 Example Usage:
 ```c#

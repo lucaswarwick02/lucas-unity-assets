@@ -1,6 +1,6 @@
 # Arcadian Assets
 
-A colelction of shared Unity tools and utilities for internal projects.
+A collection of shared Unity tools and utilities for internal projects.
 
 ---
 
@@ -80,7 +80,7 @@ public class Example : MonoBehaviour
 
 `Direction2D`
 
-A simple enum representing 2D directions (`Up`, `Down`, `Left`, `Right`) with an extension to covnert a `Vector2D` into the closest `Direction2D`. Useful for interpreting movement or input vectors in a grid or direction based system.
+A simple enum representing 2D directions (`Up`, `Down`, `Left`, `Right`) with an extension to convert a `Vector2D` into the closest `Direction2D`. Useful for interpreting movement or input vectors in a grid or direction based system.
 
 Example Usage:
 ```c#
@@ -194,7 +194,7 @@ public class Example : MonoBehaviour
 
 `Numbers`
 
-An extension method for converting intergers to Roman numerals. Useful for displaying numbers in a classical or stylised format (e.g., UI labels, levels, ranks) without manual mapping logic.
+An extension method for converting integers to Roman numerals. Useful for displaying numbers in a classical or stylized format (e.g., UI labels, levels, ranks) without manual mapping logic.
 
 Example Usage:
 ```c#
@@ -246,7 +246,7 @@ public class Example : MonoBehaviour
 
 `Sprite`
 
-A set of extension methods for `Sprite` to manipulate pivots, locate pixels by color, covert pixel positions to UV offsets, an dremove specific pixel colors. Useful for dynamically adjusting sprite origins, detecting color positions, or creating modified textures at runtime.
+A set of extension methods for `Sprite` to manipulate pivots, locate pixels by color, covert pixel positions to UV offsets, an remove specific pixel colors. Useful for dynamically adjusting sprite origins, detecting color positions, or creating modified textures at runtime.
 
 Example Usage:
 ```c#
@@ -285,7 +285,7 @@ public class Example : MonoBehaviour
 
 `String`
 
-A set of extension methods for `string` to handle pluralisation, formatting, casing, rich text styling, and emoji insertion. Useful for dynamically generating readable, stylised, and interactive text in UI without manual string manipulation. 
+A set of extension methods for `string` to handle pluralization, formatting, casing, rich text styling, and emoji insertion. Useful for dynamically generating readable, stylized, and interactive text in UI without manual string manipulation. 
 
 Example Usage:
 ```c#
@@ -406,7 +406,7 @@ public class Example : MonoBehaviour
 `SmoothCameraFollow`
 
 
-A reusable Unity component for smoothly following a target (e.g., player) with damping and optional screen shake. Useful for creating dynamic, responsive camera mothion that feels natural while maintaining focus on the target.
+A reusable Unity component for smoothly following a target (e.g., player) with damping and optional screen shake. Useful for creating dynamic, responsive camera motion that feels natural while maintaining focus on the target.
 
 Example Usage:
 ```c#

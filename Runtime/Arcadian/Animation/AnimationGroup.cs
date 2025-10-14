@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Arcadian.Animation
 {
     /// <summary>
-    /// A reusable Unity component for managing multiple animtaions on a <c>SpriteRenderer</c> or <c>UI.Image</c>. Useful for switching between named animation states (like character animations, UI transisitons, or effects) with lightweight, scriptable control over frame timing, looping, and automatic frame updates.
+    /// A reusable Unity component for managing multiple animations on a <c>SpriteRenderer</c> or <c>UI.Image</c>. Useful for switching between named animation states (like character animations, UI transitions, or effects) with lightweight, scriptable control over frame timing, looping, and automatic frame updates.
     /// </summary>
     public class AnimationGroup : MonoBehaviour
     {
@@ -16,7 +16,7 @@ namespace Arcadian.Animation
         public Component target;
 
         /// <summary>
-        /// Name of the aniamtion to use on start.
+        /// Name of the animation to use on start.
         /// </summary>
         public string defaultAnimation;
 
