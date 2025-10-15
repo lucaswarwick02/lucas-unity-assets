@@ -39,7 +39,7 @@ Below is a list of the different submodules:
 - [Maths](Runtime/Arcadian/Maths/README.md) (`Curves`)
 - Pathfinding
 - Shaders
-- Sound
+- [Sound](Runtime/Arcadian/Sound/README.md) (`SoundEffect`, `SoundEffectInstance`)
 - [StateManagement](Runtime/Arcadian/StateManagement/README.md) (`StateMachine`)
 - System
 - UI
