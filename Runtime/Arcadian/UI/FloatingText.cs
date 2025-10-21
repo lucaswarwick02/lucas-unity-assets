@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Arcadian.Maths;
-using Arcadian.System;
+using Arcadian;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -21,9 +21,9 @@ namespace Arcadian.UI
             float fadeTime = 0.25f,
             float stayTime = 0.5f)
         {
-            if (string.IsNullOrWhiteSpace(ArcadianAssets.Config.FloatingTextPath))
+            if (string.IsNullOrWhiteSpace(ArcadianAssetsSettings.GetOrCreate().floatingTextPath))
             {
-                Debug.LogError("You must set ArcadianAssets.Config.FloatingTextPath in order to use FloatingText.Create()");
+                Debug.LogError("You must set ArcadianAssetsSettings.FloatingTextPath in order to use FloatingText.Create()");
                 return;
             }
 
@@ -38,7 +38,7 @@ namespace Arcadian.UI
             var origin = worldPos + Vector3.one * startOffset;
             
             Addressables.InstantiateAsync(
-                        ArcadianAssets.Config.FloatingTextPath,
+                        ArcadianAssetsSettings.GetOrCreate().floatingTextPath,
                         position,
                         rotation,
                         parent)

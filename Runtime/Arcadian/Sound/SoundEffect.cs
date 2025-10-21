@@ -1,4 +1,4 @@
-﻿using Arcadian.System;
+﻿using Arcadian;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Audio;
@@ -22,7 +22,7 @@ namespace Arcadian.Sound
         public void Play(float? clipLength = null, bool offsetPitch = false)
         {
             Addressables.InstantiateAsync(
-                        ArcadianAssets.Config.SoundEffectInstancePath,
+                        ArcadianAssetsSettings.GetOrCreate().soundEffectPath,
                         Vector3.zero,
                         Quaternion.identity)
                     .Completed +=

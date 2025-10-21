@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Arcadian.Maths;
-using Arcadian.System;
+using Arcadian;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
@@ -18,13 +18,13 @@ namespace Arcadian.UI.Transition
         
         public static void ChangeScene(string sceneName, string header, string body, float speed = 1f, float textSpeed = 1f)
         {
-            if (string.IsNullOrWhiteSpace(ArcadianAssets.Config.TransitionEffectPath))
+            if (string.IsNullOrWhiteSpace(ArcadianAssetsSettings.GetOrCreate().transitionEffectPath))
             {
                 Debug.LogError("You must set ArcadianAssetsConfig.TransitionEffectPath in order to use TransitionEffect.ChangeScene()");
                 return;
             }
             
-            Addressables.InstantiateAsync(ArcadianAssets.Config.TransitionEffectPath, Position, Quaternion.identity).Completed +=
+            Addressables.InstantiateAsync(ArcadianAssetsSettings.GetOrCreate().transitionEffectPath, Position, Quaternion.identity).Completed +=
                 handle =>
                 {
                     var transitionEffect = handle.Result.GetComponent<TransitionEffect>();
