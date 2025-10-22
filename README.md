@@ -38,7 +38,7 @@ Below is a list of the different submodules:
 - [Generic](Runtime/Arcadian/Generic/README.md) (`Applicator`, `Ref`)
 - [IO](Runtime/Arcadian/IO/README.md) (`AbstractSaveData<T>`)
 - [Maths](Runtime/Arcadian/Maths/README.md) (`Curves`)
-- Pathfinding
+- [Pathfinding](Runtime/Arcadian/Pathfinding/README.md) (`GridMovement`, `GridPathfinder`, `Node`)
 - Shaders
 - [Sound](Runtime/Arcadian/Sound/README.md) (`SoundEffect`, `SoundEffectInstance`)
 - [StateManagement](Runtime/Arcadian/StateManagement/README.md) (`StateMachine`)
