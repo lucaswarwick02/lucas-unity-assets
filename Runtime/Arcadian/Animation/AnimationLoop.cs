@@ -2,10 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using NaughtyAttributes;
 
 namespace Arcadian.Animation
 {
@@ -14,42 +11,57 @@ namespace Arcadian.Animation
     /// Supports looping or one-off animations without using an Animator Controller. 
     /// Allows control over timing, looping, and destruction on completion.
     /// </summary>
+    [AddComponentMenu("Arcadian/Animation/Animation Loop")]
     public class AnimationLoop : MonoBehaviour
     {
-        /// <summary>
-        /// The target component to animate. Must be a <c>SpriteRenderer</c> or <c>UI.Image</c>.
-        /// </summary>
-        public Component target;
-
-        /// <summary>
-        /// Time delay in seconds between frames.
-        /// </summary>
-        public float frameDelay = 0.125f;
+        [ShowIf("useSpriteRenderer"), BoxGroup("Visuals")]
+        public SpriteRenderer spriteRenderer;
+        
+        [ShowIf("useImage"), BoxGroup("Visuals")]
+        public Image image;
 
         /// <summary>
         /// The sequence of sprites to animate.
         /// </summary>
+        [Tooltip("The sequence of sprites to animate."), BoxGroup("Visuals")]
         public Sprite[] sprites;
+
+        /// <summary>
+        /// Time delay in seconds between frames.
+        /// </summary>
+        [Tooltip("Time delay in seconds between frames."), BoxGroup("Settings")]
+        public float frameDelay = 0.125f;
 
         /// <summary>
         /// If true, the GameObject will be destroyed when the animation finishes.
         /// </summary>
+        [Tooltip("If true, the GameObject will be destroyed when the animation finishes."), BoxGroup("Settings")]
         public bool destroyOnFinish;
 
         /// <summary>
         /// If true, the animation will automatically play on start.
         /// </summary>
+        [Tooltip("If true, the animation will automatically play on start."), BoxGroup("Settings")]
         public bool playOnStart;
 
         /// <summary>
         /// If true, the animation will loop indefinitely.
         /// </summary>
+        [Tooltip("If true, the animation will loop indefinitely."), BoxGroup("Settings")]
         public bool loop;
 
         /// <summary>
         /// If true, the animation will use unscaled time (ignores Time.timeScale).
         /// </summary>
+        [Tooltip("If true, the animation will use unscaled time (ignores Time.timeScale)."), BoxGroup("Settings")]
         public bool useUnscaledTime;
+
+        /// <summary>
+        /// If true, use Image instead of SpriteRenderer.
+        /// </summary>
+        [Tooltip("If true, use Image instead of SpriteRenderer."), BoxGroup("Settings")]
+        public bool useImage;
+        private bool useSpriteRenderer => !useImage;
 
         /// <summary>
         /// Event triggered when the animation frame changes.
@@ -64,19 +76,9 @@ namespace Arcadian.Animation
         private Coroutine _play;
 
         /// <summary>
-        /// Gets or sets the target component to animate. Only allows <c>SpriteRenderer</c> or <c>UI.Image</c>.
+        /// Gets the target component to animate. Only allows <c>SpriteRenderer</c> or <c>UI.Image</c>.
         /// </summary>
-        public Component Target
-        {
-            get => target;
-            set
-            {
-                if (value is SpriteRenderer || value is Image || value == null)
-                {
-                    target = value;
-                }
-            }
-        }
+        public Component Target => useImage ? image : spriteRenderer;
 
         private void Awake()
         {
@@ -135,51 +137,8 @@ namespace Arcadian.Animation
 
         private void SetSprite(Sprite sprite)
         {
-            if (target is SpriteRenderer sr) sr.sprite = sprite;
-            if (target is Image img) img.sprite = sprite;
+            if (Target is SpriteRenderer sr) sr.sprite = sprite;
+            if (Target is Image img) img.sprite = sprite;
         }
     }
-
-#if UNITY_EDITOR
-
-    /// <summary>
-    /// Custom editor for <c>AnimationLoop</c> to handle inspector validation and display.
-    /// </summary>
-    [CustomEditor(typeof(AnimationLoop))]
-    public class AnimationLoopEditor : Editor
-    {
-        /// <summary>
-        /// Draws the custom inspector GUI for <c>AnimationLoop</c> .
-        /// </summary>
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-
-            var script = serializedObject.FindProperty("m_Script");
-            EditorGUI.BeginDisabledGroup(true); // Script field is read-only
-            EditorGUILayout.PropertyField(script);
-            EditorGUI.EndDisabledGroup();
-
-            var targetProp = serializedObject.FindProperty("target");
-            EditorGUI.BeginChangeCheck();
-            var obj = EditorGUILayout.ObjectField("Target", targetProp.objectReferenceValue, typeof(Component), true);
-
-            if (obj == null || obj is SpriteRenderer || obj is Image)
-                targetProp.objectReferenceValue = obj;
-            else
-                EditorGUILayout.HelpBox("Target must be a SpriteRenderer or Image.", MessageType.Warning);
-
-            // Draw remaining fields manually
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("frameDelay"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("sprites"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("destroyOnFinish"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("playOnStart"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("loop"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("useUnscaledTime"));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-    }
-#endif
-
 }

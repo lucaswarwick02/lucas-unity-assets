@@ -18,6 +18,7 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.addressables": "1.21.21",
     "com.unity.nuget.newtonsoft-json": "2.0.2",
-    "com.solidalloy.type-references": "2.16.0"
+    "com.solidalloy.type-references": "2.16.0",
+    "com.dbrizov.naughtyattributes": "2.1.4"
   }
 }

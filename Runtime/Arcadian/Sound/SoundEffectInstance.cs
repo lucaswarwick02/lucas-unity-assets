@@ -7,7 +7,7 @@ namespace Arcadian.Sound
     /// <summary>
     /// A lightweight, self-contained audio component for playing temporary sound effects with optional pitch variance and automatic clean up. Useful for one-shot SFX like explosions, button clicks, or footsteps without manually managing object lifetimes.
     /// </summary>
-    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(AudioSource)), AddComponentMenu("Arcadian/Sound/Sound Effect Instance")]
     public class SoundEffectInstance : MonoBehaviour
     {
         private AudioSource _audioSource;

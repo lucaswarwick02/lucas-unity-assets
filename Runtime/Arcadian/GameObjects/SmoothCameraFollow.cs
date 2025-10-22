@@ -2,13 +2,14 @@
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using NaughtyAttributes;
 
 namespace Arcadian.GameObjects
 {
     /// <summary>
     /// A reusable Unity component for smoothly following a target (e.g., player) with damping and optional screen shake. Useful for creating dynamic, responsive camera motion that feels natural while maintaining focus on the target.
     /// </summary>
-    [DisallowMultipleComponent]
+    [DisallowMultipleComponent, AddComponentMenu("Arcadian/GameObjects/Smooth Camera Follow")]
     public class SmoothCameraFollow : MonoBehaviour
     {
         private static SmoothCameraFollow _instance;
@@ -16,31 +17,37 @@ namespace Arcadian.GameObjects
         /// <summary>
         /// Target transform to follow.
         /// </summary>
+        [Tooltip("Target transform to follow."), BoxGroup("Positional")]
         public Transform target;
 
         /// <summary>
         /// Offset to use from the target.
         /// </summary>
+        [Tooltip("Offset to use from the target."), BoxGroup("Positional")]
         public Vector3 offset;
 
         /// <summary>
         /// If true, ignores following the z-axis.
         /// </summary>
+        [Tooltip("If true, ignores following the z-axis."), BoxGroup("Settings")]
         public bool ignoreZ = true;
 
         /// <summary>
         /// The time it takes to smooth.
         /// </summary>
+        [Tooltip("The time it takes to smooth."), BoxGroup("Settings")]
         public float smoothTime = 0.3f;
 
         /// <summary>
         /// Maximum distance to delay behind the target.
         /// </summary>
+        [Tooltip("Maximum distance to delay behind the target."), BoxGroup("Settings")]
         public float maxDistance = 10f;
 
         /// <summary>
         /// Speed multiplier when far from target.
         /// </summary>
+        [Tooltip("Speed multiplier when far from target."), BoxGroup("Settings")]
         public float speedMultiplier = 2f;
 
         private Vector3 _velocity = Vector3.zero;

@@ -1,29 +1,31 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace Arcadian.Pathfinding
 {
     /// <summary>
     /// A Unity component that generates a 2D grid of nodes for pathfinding, providing A*-based shortest path calculations, randomized path variation, and utility methods to query the closest walkable node, while also visualising the grid in the editor for debugging.
     /// </summary>
+    [AddComponentMenu("Arcadian/Pathfinding/Grid Pathfinder")]
     public class GridPathfinder : MonoBehaviour
     {
         /// <summary>
         /// Size of the grid to create and use.
         /// </summary>
-        [Tooltip("Size of the grid to create and use.")]
+        [Tooltip("Size of the grid to create and use."), BoxGroup("Grid")]
         public Vector2Int gridSize = new(10, 10);
 
         /// <summary>
         /// Size of each node (Unity units).
         /// </summary>
-        [Tooltip("Size of each node (Unity units).")]
+        [Tooltip("Size of each node (Unity units)."), BoxGroup("Grid")]
         public float nodeSize = 1f;
 
         /// <summary>
         /// How much randomness to add to the generated paths.
         /// </summary>
-        [Range(0f, 1f), Tooltip("How much randomness to add to the generated paths.")]
+        [Range(0f, 1f), Tooltip("How much randomness to add to the generated paths."), BoxGroup("Settings")]
         public float randomnessFactor = 0.1f;
 
         private Node[,] _grid;

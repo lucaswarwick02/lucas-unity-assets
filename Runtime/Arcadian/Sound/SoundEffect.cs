@@ -8,7 +8,7 @@ namespace Arcadian.Sound
     /// <summary>
     /// A ScriptableObject wrapper for easily playing sound effects via Addressables, supporting custom pitch, clip length, and mixer routing. Useful for managing reusable SFX assets that can be triggered anywhere without needing scene references or persistent AudioSources.
     /// </summary>
-    [CreateAssetMenu(menuName = "Misc/Sound Effect", fileName = "New Sound Effect")]
+    [CreateAssetMenu(menuName = "Arcadian/Sound Effect", fileName = "New Sound Effect")]
     public class SoundEffect : ScriptableObject
     {
         [field: SerializeField] public AudioClip Clip { private set; get; }

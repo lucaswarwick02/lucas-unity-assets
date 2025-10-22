@@ -1,21 +1,25 @@
 ﻿using Arcadian.Maths;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace Arcadian.Effects
 {
     /// <summary>
     /// A simple Unity component that makes a GameObject smoothly pulse in size. Useful for drawing attention to UI elements or objects with a looping, easing-based scale effect.
     /// </summary>
+    [AddComponentMenu("Arcadian/Effects/Pulse")]
     public class Pulse : MonoBehaviour
     {
         /// <summary>
         /// The speed multiplier to in the oscillation calculation.
         /// </summary>
+        [Tooltip("The speed multiplier to in the oscillation calculation."), BoxGroup("Settings")]
         public float speed = 5;
 
         /// <summary>
         /// The max scale to increase the size by.
         /// </summary>
+        [Tooltip("The max scale to increase the size by."), BoxGroup("Settings")]
         public float scale = 1.15f;
 
         private void Update()

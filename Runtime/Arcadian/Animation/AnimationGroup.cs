@@ -2,43 +2,58 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using NaughtyAttributes;
 
 namespace Arcadian.Animation
 {
     /// <summary>
     /// A reusable Unity component for managing multiple animations on a <c>SpriteRenderer</c> or <c>UI.Image</c>. Useful for switching between named animation states (like character animations, UI transitions, or effects) with lightweight, scriptable control over frame timing, looping, and automatic frame updates.
     /// </summary>
+    [AddComponentMenu("Arcadian/Animation/Animation Group")]
     public class AnimationGroup : MonoBehaviour
     {
-        /// <summary>
-        /// The target component to animate. Must be a <c>SpriteRenderer</c> or <c>UI.Image</c>.
-        /// </summary>
-        public Component target;
+        [ShowIf("useSpriteRenderer"), BoxGroup("Visuals")]
+        public SpriteRenderer spriteRenderer;
+        
+        [ShowIf("useImage"), BoxGroup("Visuals")]
+        public Image image;
 
         /// <summary>
         /// Name of the animation to use on start.
         /// </summary>
+        [BoxGroup("Visuals"), Tooltip("Name of the animation to use on start.")]
         public string defaultAnimation;
 
         /// <summary>
         /// List of different animations to pick from.
         /// </summary>
+        [BoxGroup("Visuals"), Tooltip("List of different animations to pick from.")]
         public AnimationState[] animationStates;
 
         /// <summary>
         /// Time delay (in seconds) between frames.
         /// </summary>
+        [BoxGroup("Settings"), Tooltip("Time delay (in seconds) between frames.")]
         public float frameDelay = 0.125f;
 
         /// <summary>
         /// If true, the animation will automatically play on start.
         /// </summary>
+        [BoxGroup("Settings"), Tooltip("If true, the animation will automatically play on start.")]
         public bool playOnStart = true;
 
         /// <summary>
         /// If true, the animation will use unscaled time (ignores Time.timeScale).
         /// </summary>
+        [BoxGroup("Settings"), Tooltip("If true, the animation will use unscaled time (ignores Time.timeScale).")]
         public bool useUnscaledTime;
+
+        /// <summary>
+        /// If true, use Image instead of SpriteRenderer.
+        /// </summary>
+        [BoxGroup("Settings"), Tooltip("If true, use Image instead of SpriteRenderer.")]
+        public bool useImage;
+        private bool useSpriteRenderer => !useImage;
 
         /// <summary>
         /// Event triggered when the animation frame changes.
@@ -64,19 +79,9 @@ namespace Arcadian.Animation
         public int CurrentFrame { get; private set; }
         
         /// <summary>
-        /// Gets or sets the target component to animate. Only allows <c>SpriteRenderer</c> or <c>UI.Image</c>.
+        /// Gets the target component to animate. Only allows <c>SpriteRenderer</c> or <c>UI.Image</c>.
         /// </summary>
-        public Component Target
-        {
-            get => target;
-            set
-            {
-                if (value is SpriteRenderer || value is Image || value == null)
-                {
-                    target = value;
-                }
-            }
-        }
+        public Component Target => useImage ? image : spriteRenderer;
 
         private void Start()
         {
@@ -143,12 +148,13 @@ namespace Arcadian.Animation
                 OnAnimationFinished?.Invoke();
             }
 
-            if (target is SpriteRenderer sp) sp.sprite = CurrentAnimation.sprites[CurrentFrame];
-            if (target is Image img) img.sprite = CurrentAnimation.sprites[CurrentFrame];
-            
+            if (Target is SpriteRenderer sp) sp.sprite = CurrentAnimation.sprites[CurrentFrame];
+            if (Target is Image img) img.sprite = CurrentAnimation.sprites[CurrentFrame];
+
             OnFrameChange?.Invoke();
         }
     }
+    
 
     /// <summary>
     /// Contains the information used to define a single animation loop.

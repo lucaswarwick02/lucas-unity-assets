@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace Arcadian.Pathfinding
 {
     /// <summary>
     /// A Unity component that moves an object smoothly along a series of <c>Node</c> positions, providing movement speed control, current velocity tracking, and an event callback when the final target node is reached. Ideal for pathfinding agents or grid-based movement systems.
     /// </summary>
-    [ExecuteAlways]
+    [ExecuteAlways, AddComponentMenu("Arcadian/Pathfinding/Grid Movement")]
     public class GridMovement : MonoBehaviour
     {
         /// <summary>
@@ -19,7 +20,7 @@ namespace Arcadian.Pathfinding
         /// <summary>
         /// Speed to move the object (units/s).
         /// </summary>
-        [Tooltip("Speed to move the object (units/s).")]
+        [Tooltip("Speed to move the object (units/s)."), BoxGroup("Settings")]
         public float speed = 2;
         
         /// <summary>
