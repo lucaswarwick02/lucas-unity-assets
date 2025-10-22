@@ -2,7 +2,7 @@
 
 > Click [here](../../../README.md#features) to go back.
 
-## `Applicator`
+## `Applicator<T>`
 
 A generic utility class that stores a list of functions or actions and invokes them in a sequence. Useful for building modular, chainable operations or event-like systems where you want to process a value through multiple transformations, or none at all. Good example would be equipment in an RPG that provide bonuses when equipped. 
 
@@ -31,7 +31,7 @@ public class Example : MonoBehaviour
     }
 ```
 
-## `Ref`
+## `Ref<T>`
 
 A simple generic struct that wraps a value in a reference-like container. Useful for passing values by reference, or storing mutable data in contexts where normal value types would be copied. Useful for scenarios where `ref` cannot be used (bit pedantic, but does have it's use cases).
 
