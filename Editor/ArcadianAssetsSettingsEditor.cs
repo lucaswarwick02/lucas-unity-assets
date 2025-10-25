@@ -1,6 +1,4 @@
 using UnityEditor;
-using UnityEngine;
-using Arcadian;
 
 namespace Arcadian.Systems.Editor
 {
@@ -24,9 +22,15 @@ namespace Arcadian.Systems.Editor
                     var serializedObject = new SerializedObject(settings);
                     serializedObject.Update();
 
+                    EditorGUILayout.Space();
+                    EditorGUILayout.LabelField("Prefab Locations", EditorStyles.boldLabel);
                     EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ArcadianAssetsSettings.floatingTextPath)));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ArcadianAssetsSettings.transitionEffectPath)));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ArcadianAssetsSettings.soundEffectPath)));
+
+                    EditorGUILayout.Space();
+                    EditorGUILayout.LabelField("Developer Console", EditorStyles.boldLabel);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ArcadianAssetsSettings.developerConsoleKey)));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ArcadianAssetsSettings.developerConsoleType)));
 
                     serializedObject.ApplyModifiedProperties();
                 },

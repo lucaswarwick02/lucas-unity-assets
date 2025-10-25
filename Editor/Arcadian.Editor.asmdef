@@ -1,4 +1,18 @@
 {
-	"name": "Arcadian.Editor",
-	"references":[ "GUID:5dbe19ea2aba2ee468d7756ca8c93599" ]
+    "name": "Arcadian.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5dbe19ea2aba2ee468d7756ca8c93599",
+        "GUID:ea6a6314f279f814facc8c48a7d3c9f1",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -1,4 +1,10 @@
 using UnityEngine;
+using TypeReferences;
+using Arcadian.UI;
+using UnityEngine.InputSystem;
+
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 using System.IO;
@@ -25,9 +31,15 @@ namespace Arcadian
         public string transitionEffectPath;
 
         /// <summary>
-        /// Path to the sound effect prefab.
+        /// Type of the developer console, in order for the component to be added.
         /// </summary>
-        public string soundEffectPath;
+        [Inherits(typeof(AbstractDeveloperConsole), IncludeAdditionalAssemblies = new[] { "Assembly-CSharp" })]
+        public TypeReference developerConsoleType;
+
+        /// <summary>
+        /// KeyCode to press in order to open the Developer Console.
+        /// </summary>
+        public Key developerConsoleKey = Key.F3;
 
         private const string AssetName = "ArcadianAssetsSettings";
         private const string AssetPath = "Assets/Resources/" + AssetName + ".asset";

@@ -14,8 +14,8 @@ namespace Arcadian.UI
         
         [Header("Abstract UI")]
         [SerializeField] private AbstractUIGroup abstractUIGroup;
-        [SerializeField] private SoundEffect openSound;
-        [SerializeField] private SoundEffect closeSound;
+        [SerializeField] private SFX openSound;
+        [SerializeField] private SFX closeSound;
         [SerializeField] private bool ignoreScaler;
 
         private const float SizeMultiplier = 1.075f;

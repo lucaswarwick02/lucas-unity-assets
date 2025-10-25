@@ -7,8 +7,8 @@ namespace Arcadian.UI
 {
     public class ButtonSounds : MonoBehaviour, ISelectHandler, IPointerClickHandler, ISubmitHandler, IPointerEnterHandler
     {
-        [SerializeField] private SoundEffect selectSound;
-        [SerializeField] private SoundEffect pressSound;
+        [SerializeField] private SFX selectSound;
+        [SerializeField] private SFX pressSound;
 
         /// <summary>
         /// Gamepad - Select.
