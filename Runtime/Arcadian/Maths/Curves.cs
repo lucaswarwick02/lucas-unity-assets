@@ -11,10 +11,21 @@ namespace Arcadian.Maths
         /// AnimationCurve that starts at 0 and ends at 1.
         /// </summary>
         public static readonly AnimationCurve In = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-        
+
         /// <summary>
         /// AnimationCurve that starts at 1 and ends at 0.
         /// </summary>
         public static readonly AnimationCurve Out = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+        
+        /// <summary>
+        /// Normal-distribution-like bump, peak at 0.5.
+        /// </summary>
+        public static readonly AnimationCurve Bell = new(
+            new Keyframe(0f, 0f),
+            new Keyframe(0.25f, 0.6f),
+            new Keyframe(0.5f, 1f),
+            new Keyframe(0.75f, 0.6f),
+            new Keyframe(1f, 0f)
+        );
     }
 }
