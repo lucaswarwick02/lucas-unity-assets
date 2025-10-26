@@ -11,30 +11,38 @@ namespace Arcadian.Sound
     {
         [field: SerializeField] public AudioClip Clip { private set; get; }
         [field: SerializeField] public AudioMixerGroup MixerGroup { private set; get; }
+    }
 
+    public static class SFXExtensions
+    {
         /// <summary>
-        /// Play a sound effect.
+        /// Play a sound effect. If the object is null, then we exit early.
+        /// We use an extension method to allow for an object to call this method even if
+        /// the object has not been set, to avoid null errors.
         /// </summary>
-        /// <param name="clipLength"></param>
-        /// <param name="offsetPitch"></param>
-        public void Play(float? clipLength = null, bool offsetPitch = false)
+        /// <param name="sfx">SFX scriptable object<./param>
+        /// <param name="clipLength">Length to shorten the clip to.</param>
+        /// <param name="offsetPitch">Whether or not to slightly offset the pitch.</param>
+        public static void Play(this SFX sfx, float? clipLength = null, bool offsetPitch = false)
         {
+            if (sfx == null) return;
+
             // Create the object
-            var audioSource = new GameObject { name = $"SFX ({Clip.name})" }.AddComponent<AudioSource>();
+            var audioSource = new GameObject { name = $"SFX ({sfx.Clip.name})" }.AddComponent<AudioSource>();
 
             // Set the clip and the mixer group
-            audioSource.clip = Clip;
-            audioSource.outputAudioMixerGroup = MixerGroup;
+            audioSource.clip = sfx.Clip;
+            audioSource.outputAudioMixerGroup = sfx.MixerGroup;
 
             // Optional: Adjust pitch to change clip length
-            if (clipLength.HasValue) audioSource.pitch = Clip.length / clipLength.Value;
+            if (clipLength.HasValue) audioSource.pitch = sfx.Clip.length / clipLength.Value;
 
             // Optional: Offset the pitch
             if (offsetPitch) audioSource.pitch += Random.Range(-0.1f, 0.1f);
 
             // Play and destroy once ended
             audioSource.Play();
-            Destroy(audioSource.gameObject, Clip.length / audioSource.pitch);
+            Object.Destroy(audioSource.gameObject, sfx.Clip.length / audioSource.pitch);
         }
     }
 }

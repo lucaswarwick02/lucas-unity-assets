@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Arcadian.Extensions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -9,6 +8,9 @@ using UnityEngine.UI;
 
 namespace Arcadian.UI
 {
+    /// <summary>
+    /// A base class for creating an in-game developer console in Unity, allowing commands to be typed, executed, and displayed through a minimal overlay UI. It provides built-in commands like <c>echo</c>, <c>clear</c>, and <c>scene</c>, along with support for adding custom commands, maintaining command history, and persisting across scene loads.
+    /// </summary>
     public abstract class AbstractDeveloperConsole : MonoBehaviour
     {
         public Key Key { set; get; }
