@@ -27,29 +27,5 @@ namespace Arcadian.Extensions
 
             action();
         }
-
-        /// <summary>
-        /// Run an action over a specified duration, where the elapsed time is passed into the function.
-        /// </summary>
-        /// <param name="_">MonoBehaviour script</param>
-        /// <param name="duration">Length of time to run the function over.</param>
-        /// <param name="onProgress">Action to be called each frame.</param>
-        /// <param name="useUnscaledTime">If true, use unscaled time (ignores Time.timeScale).</param>
-        /// <returns></returns>
-        public static IEnumerator RunOverTime(this MonoBehaviour _, float duration, Action<float> onProgress, bool useUnscaledTime = false)
-        {
-            var timer = 0f;
-
-            while (timer < duration)
-            {
-                onProgress(timer / duration);
-
-                timer += useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
-
-                yield return null;
-            }
-
-            onProgress(1f);
-        }
     }
 }

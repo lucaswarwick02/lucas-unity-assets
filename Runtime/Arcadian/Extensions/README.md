@@ -66,7 +66,7 @@ public class Example : MonoBehaviour
 
 ## `MonoBehaviour`
 
-A set of `MonoBehaviour` extension methods for timing and scheduling actions. Useful for invoking callbacks at the end of a frame, or smoothly running logic over a given duration without writing custom coroutines.
+A set of `MonoBehaviour` extension methods for timing and scheduling actions. Useful for invoking callbacks at the end of a frame.
 
 Example Usage:
 ```c#
@@ -80,13 +80,6 @@ public class Example : MonoBehaviour
     {
         // Invoke an action at the end of the current frame
         this.InvokeEndOnFrame(() => Debug.Log("End of frame reached"));
-
-        // Start a coroutine to gradually move an object over 2 seconds
-        StartCoroutine(this.RunOverTime(2f, progress =>
-        {
-            // 'progress' goes from 0 to 1 over time
-            transform.position = Vector3.Lerp(Vector3.zero, Vector3.up * 5, progress);
-        }));
     }
 }
 ```
