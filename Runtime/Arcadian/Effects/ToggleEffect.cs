@@ -45,7 +45,7 @@ namespace Arcadian.Effects
             _isQuitting = true;
         }
 
-        private IEnumerator Animation => IEnumeratorExtensions.Tween(
+        private IEnumerator Animation => this.Tween(
             duration: AnimationLengthSeconds,
             onStart: () =>
             {
