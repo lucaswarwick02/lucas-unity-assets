@@ -148,7 +148,7 @@ namespace Arcadian.UI
             };
             DontDestroyOnLoad(instance.root);
 
-            // Add a canvasso it counts as a UI
+            // Add a canvas it counts as a UI
             instance.canvas = instance.root.AddComponent<Canvas>();
             instance.canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             instance.canvas.sortingOrder = 1000;
@@ -291,7 +291,7 @@ namespace Arcadian.UI
                                 throw new IndexOutOfRangeException($"Scene ID of {sceneNumber} is out of range.");
                             }
 
-                            SceneManager.LoadScene(sceneNumber);
+                            SceneTransition.LoadScene(sceneNumber);
                             return $"Scene changed to '{sceneValue}' ('{System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(sceneNumber))}')";
                         }
                         else
@@ -306,7 +306,7 @@ namespace Arcadian.UI
                                 throw new ArgumentException($"Scene '{sceneValue}' is not in the build settings.");
                             }
 
-                            SceneManager.LoadScene(sceneValue);
+                            SceneTransition.LoadScene(sceneValue);
                             return $"Scene changed to '{sceneValue}'";
                         }
                     }

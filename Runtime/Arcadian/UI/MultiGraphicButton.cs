@@ -5,13 +5,13 @@ namespace Arcadian.UI
 {
     public class MultiGraphicButton : Button
     {
-        private Graphic[] _graphics;
-
         protected override void DoStateTransition(SelectionState state, bool instant)
         {
-            //get the graphics, if it could not get the graphics, return here
-            if (!GetGraphics())
-                return;
+            // Get all graphics to tint
+            var graphics = GetComponentsInChildren<Graphic>();
+
+            // Return early if there aren't any graphics
+            if (graphics == null || graphics.Length == 0) return;
  
             var targetColor = state switch { 
                 SelectionState.Disabled => colors.disabledColor,
@@ -22,15 +22,10 @@ namespace Arcadian.UI
                 _ => Color.white 
             };
  
-            foreach (var graphic in _graphics)
+            foreach (var graphic in graphics)
+            {
                 graphic.CrossFadeColor(targetColor, instant ? 0 : colors.fadeDuration, true, true);
-        }
- 
-        private bool GetGraphics()
-        {
-            _graphics = GetComponentsInChildren<Graphic>();
-
-            return _graphics is { Length: > 0 };
+            }
         }
     }
 }

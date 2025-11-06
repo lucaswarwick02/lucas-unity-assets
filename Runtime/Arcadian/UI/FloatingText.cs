@@ -1,109 +1,87 @@
 ﻿using System.Collections;
+using Arcadian.Extensions;
 using Arcadian.Maths;
-using Arcadian;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Arcadian.UI
 {
-    public static class FloatingText
+    /// <summary>
+    /// A lightweight utility for displaying temporary animated text in world space, ideally for effects like damage numbers or notifications. It spawns a <c>TextMeshPro</c> object, animates it upward with fade-in/out transitions, then destroys it after completion.
+    /// </summary>
+    public class FloatingText : MonoBehaviour
     {
-        public static void Create(
+        private TMP_Text tmp;
+
+        /// <summary>
+        /// Create an animated floating text object at a given position.
+        /// </summary>
+        /// <param name="text">Text to display.</param>
+        /// <param name="position">Position to start the animation.</param>
+        /// <param name="fontSize">Size of the font to use.</param>
+        /// <param name="duration">Time to hold once the animation is done.</param>
+        /// <param name="animationDuration">Time to perform the fade in/out animations.</param>
+        /// <param name="offset">Height to float to from the offset.</param>
+        /// <param name="rotation">Maximum offset for rotation.</param>
+        public static void Instantiate(
             string text,
-            Vector3 worldPos,
-            Color? color = null,
-            Transform parent = null,
-            Camera camera = null,
-            float startOffset = 0f,
-            float maxOffset = 1f,
-            float maxRotation = 10f,
-            float fadeTime = 0.25f,
-            float stayTime = 0.5f)
+            Vector3 position,
+            float fontSize = 8,
+            float duration = 0.5f,
+            float animationDuration = 0.25f,
+            float offset = 0.5f,
+            float rotation = 10f)
         {
-            if (string.IsNullOrWhiteSpace(ArcadianAssetsSettings.GetOrCreate().floatingTextPath))
-            {
-                Debug.LogError("You must set ArcadianAssetsSettings.FloatingTextPath in order to use FloatingText.Create()");
-                return;
-            }
+            var obj = new GameObject();
+            obj.transform.position = position;
+            obj.transform.Rotate(new Vector3(0, 0, ArcMaths.signedValue * rotation));
 
-            // If not given, grab the Canvas and Camera
-            if (!parent) parent = GameObject.Find("Canvas").transform;
-            if (!camera) camera = Camera.main;
-            
-            // Calculate position + rotation
-            var position = camera!.WorldToScreenPoint(worldPos);
-            var rotation = Quaternion.Euler(0, 0, Random.Range(-maxRotation, maxRotation));
+            var fp = obj.AddComponent<FloatingText>();
 
-            var origin = worldPos + Vector3.one * startOffset;
-            
-            Addressables.InstantiateAsync(
-                        ArcadianAssetsSettings.GetOrCreate().floatingTextPath,
-                        position,
-                        rotation,
-                        parent)
-                    .Completed +=
-                handle =>
-                {
-                    var floatingText = handle.Result.GetComponent<TextMeshProUGUI>();
-                    floatingText.alpha = 0;
-                    floatingText.text = text;
+            fp.tmp = obj.AddComponent<TextMeshPro>();
+            fp.tmp.text = text;
+            fp.tmp.fontSize = fontSize;
+            fp.tmp.font = ArcadianAssetsSettings.GetOrCreate().floatingTextFont;
+            fp.tmp.enableWordWrapping = false;
+            fp.tmp.overflowMode = TextOverflowModes.Overflow;
+            fp.tmp.alignment = TextAlignmentOptions.Center;
 
-                    if (color.HasValue) floatingText.color = color.Value;
+            var rt = obj.transform as RectTransform;
+            rt.sizeDelta = Vector2.zero;
 
-                    floatingText.StartCoroutine(Example(camera, floatingText, origin, maxOffset, fadeTime, stayTime));
-                };
+            fp.StartCoroutine(fp.Animation(duration, animationDuration, offset));
         }
 
-        private static IEnumerator Example(
-            Camera camera,
-            TMP_Text tmpText,
-            Vector3 origin,
-            float maxOffset,
-            float fadeTime,
-            float stayTime)
+        private IEnumerator Animation(float duration, float animationDuration, float offset)
         {
-            tmpText.alpha = 0f;
+            // Fade in and move up
+            var basePos = transform.position;
+            var offsetPos = basePos + (Vector2.up * offset).ToVector3();
 
-            var target = origin + (Vector3.up * maxOffset);
-            
-            // Fade in
-            var timer = 0f;
-            while (timer < fadeTime)
-            {
-                var t = Curves.In.Evaluate(timer / fadeTime);
+            yield return this.Tween(
+                duration: animationDuration,
+                onUpdate: t =>
+                {
+                    transform.position = Vector3.Lerp(basePos, offsetPos, t);
+                    tmp.alpha = Mathf.Lerp(0f, 1f, t);
+                },
+                curve: Curves.In
+            );
 
-                tmpText.transform.position = camera.WorldToScreenPoint(Vector3.Lerp(origin, target, t));
-                tmpText.alpha = t;
-                
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            
-            // Stay
-            timer = 0f;
-            while (timer < stayTime)
-            {
-                tmpText.transform.position = camera.WorldToScreenPoint(target);
-                
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            
+            // Hold position
+            yield return new WaitForSeconds(duration);
+
             // Fade out
-            timer = 0f;
-            while (timer < fadeTime)
-            {
-                var t = Curves.Out.Evaluate(timer / fadeTime);
+            yield return this.Tween(
+                duration: animationDuration,
+                onUpdate: t =>
+                {
+                    tmp.alpha = Mathf.Lerp(1f, 0f, t);
+                },
+                curve: Curves.In
+            );
 
-                tmpText.transform.position = camera.WorldToScreenPoint(target);
-                tmpText.alpha = t;
-                
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            
-            Object.Destroy(tmpText.gameObject);
+            Destroy(gameObject);
         }
     }
 }

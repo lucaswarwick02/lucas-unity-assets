@@ -1,6 +1,6 @@
 # UI.Scrolling
 
-> Click [here](../../../README.md#features) to go back.
+> Click [here](../../../../README.md#features) to go back.
 
 ## `AutoScrollContent`
 

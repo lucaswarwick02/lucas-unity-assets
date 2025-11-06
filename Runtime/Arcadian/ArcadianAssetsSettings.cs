@@ -2,8 +2,7 @@ using UnityEngine;
 using TypeReferences;
 using Arcadian.UI;
 using UnityEngine.InputSystem;
-
-
+using TMPro;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -21,25 +20,30 @@ namespace Arcadian
         private static ArcadianAssetsSettings _cached;
 
         /// <summary>
-        /// Path to the floating text prefab.
-        /// </summary>
-        public string floatingTextPath;
-
-        /// <summary>
-        /// Path to the transition effect prefab.
-        /// </summary>
-        public string transitionEffectPath;
-
-        /// <summary>
         /// Type of the developer console, in order for the component to be added.
         /// </summary>
         [Inherits(typeof(AbstractDeveloperConsole), IncludeAdditionalAssemblies = new[] { "Assembly-CSharp" })]
         public TypeReference developerConsoleType;
 
         /// <summary>
+        /// Type of prefab to instantiate for custom scene transition animations.
+        /// </summary>
+        public GameObject sceneTransitionPrefab;
+
+        /// <summary>
         /// KeyCode to press in order to open the Developer Console.
         /// </summary>
         public Key developerConsoleKey = Key.F3;
+
+        /// <summary>
+        /// Text Mesh Pro font asset to use 
+        /// </summary>
+        public TMP_FontAsset floatingTextFont;
+
+        /// <summary>
+        /// List of sprite asset groups to use. First is assigned as the primary.
+        /// </summary>
+        public TMP_SpriteAsset[] floatingTextEmojiAssets;
 
         private const string AssetName = "ArcadianAssetsSettings";
         private const string AssetPath = "Assets/Resources/" + AssetName + ".asset";

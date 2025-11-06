@@ -4,10 +4,18 @@ using UnityEngine.EventSystems;
 
 namespace Arcadian.UI
 {
+    /// <summary>
+    /// A generic component for making UI elements draggable, detecting valid drop targets of type <c>T</c>, and optionally snapping back to their original position. It handles drag events, proximity-based target detection, and provides hooks for entering, exiting, and dropping onto targets.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    [RequireComponent(typeof(RectTransform))]
     public abstract class DraggableUI<T> : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler where T : MonoBehaviour
     {
+        /// <summary>
+        /// Whether or not to move the item back to it's origin once let go.
+        /// </summary>
         [Header("Draggable UI")]
-        [SerializeField] private bool snapBack = true;
+        public bool snapBack = true;
         [Space]
         
         private RectTransform _rectTransform;
@@ -41,7 +49,7 @@ namespace Arcadian.UI
                 _canvas.worldCamera,
                 out var position);
 
-            _rectTransform.position = _canvas.transform.TransformPoint(position);
+            _rectTransform.anchoredPosition = _canvas.transform.TransformPoint(position);
             
             var target = ClosestTarget();
             if (target != Target)
@@ -69,30 +77,57 @@ namespace Arcadian.UI
         private T ClosestTarget()
         {
             var worldPos = _camera.ScreenToWorldPoint(_rectTransform.position);
-            var size = Physics2D.OverlapCircleNonAlloc(worldPos, 0.5f, _overlapColliders);
-            
-            var targets = _overlapColliders.Take(size).Select(c => c.GetComponent<T>()).Where(t => t != null && IsValidTarget(t));
+            var size = Physics2D.OverlapCircleNonAlloc(worldPos, OverlapRadius, _overlapColliders);
 
             T closest = null;
-            var closestDistance = Mathf.Infinity;
+            float closestSqr = float.PositiveInfinity;
 
-            foreach (var target in targets)
+            // Iterate manually to avoid per-frame LINQ
+            for (var i = 0; i < size; i++)
             {
-                var distance = Vector2.Distance(worldPos, target.transform.position);
-                if (!(distance < closestDistance)) continue;
-                closest = target;
-                closestDistance = distance;
+                // Attempt to grab a (valid) target
+                var comp = _overlapColliders[i].GetComponent<T>();
+                if (comp == null || !IsValidTarget(comp)) continue;
+
+                float sqr = (worldPos - comp.transform.position).sqrMagnitude;
+                if (sqr < closestSqr)
+                {
+                    closest = comp;
+                    closestSqr = sqr;
+                }
             }
 
             return closest;
         }
 
+        /// <summary>
+        /// Radius to detect collisions.
+        /// </summary>
+        protected virtual float OverlapRadius => 0.5f;
+
+        /// <summary>
+        /// If we hover over a target, what makes it usable?
+        /// </summary>
+        /// <param name="target">Target object.</param>
+        /// <returns></returns>
         protected abstract bool IsValidTarget(T target);
-        
+
+        /// <summary>
+        /// Invoked when an item enters a target's radius.
+        /// </summary>
+        /// <param name="target"></param>
         protected abstract void OnTargetEnter(T target);
         
+        /// <summary>
+        /// Invoked when an item exits a target's radius.
+        /// </summary>
+        /// <param name="target"></param>
         protected abstract void OnTargetExit(T target);
 
+        /// <summary>
+        /// Invoked when an item is dropped onto a target.
+        /// </summary>
+        /// <param name="target"></param>
         protected abstract void OnTargetDrop(T target);
     }
 }

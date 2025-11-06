@@ -2,25 +2,25 @@
 
 namespace Arcadian.UI
 {
-    /// <summary>
-    /// Helper class to position UI elements in world space.
-    /// </summary>
     public class WorldSpaceUI : MonoBehaviour
     {
-        /// <summary>
-        /// World position to place the UI element.
-        /// </summary>
         public Vector3 WorldPosition { get; set; }
 
-        private static Camera _mainCamera;
+        private static Camera _camera;
 
-        private void Update()
+        void Awake()
         {
-            _mainCamera ??= Camera.main;
-            
-            if (!_mainCamera) return;
-            
-            transform.position = _mainCamera.WorldToScreenPoint(WorldPosition);
+            if (!_camera) _camera = Camera.main;
+        }
+
+        void LateUpdate()
+        {
+            if (!_camera) return;
+
+            var screenPos = _camera.WorldToScreenPoint(WorldPosition);
+            if (screenPos.z <= 0f) return;  // Avoid flipping when behind the camera
+
+            transform.position = screenPos;
         }
     }
 }

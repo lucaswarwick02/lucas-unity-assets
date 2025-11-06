@@ -28,8 +28,6 @@ A collection of shared Unity tools and utilities for internal projects.
 
 Below is a list of the different submodules:
 
-> [WIP] Items in this list have been added, but not fully documented yet.
-
 - [Animation](Runtime/Arcadian/Animation/README.md) (`AnimationLoop`, `AnimationGroup`)
 - [Effects](Runtime/Arcadian/Effects/README.md) (`Pulse`)
 - [Enums](Runtime/Arcadian/Enums/README.md) (`Direction2D`)
@@ -42,4 +40,5 @@ Below is a list of the different submodules:
 - Shaders
 - [Sound](Runtime/Arcadian/Sound/README.md) (`SoundEffect`, `SoundEffectInstance`)
 - [StateManagement](Runtime/Arcadian/StateManagement/README.md) (`StateMachine`)
-- UI
+- [UI](Runtime/Arcadian/UI/README.md) (`AbstractDeveloperConsole`, `DraggableUI`, `FloatingText`, `InteractiveButton`, `SceneTransition`, `WorldSpaceUI`)
+  - [UI.Scrolling](Runtime/Arcadian/UI/Scrolling/README.md) (`AutoScrollContent`, `HorizontalAutoScroll`, `VerticalAutoScroll`)
