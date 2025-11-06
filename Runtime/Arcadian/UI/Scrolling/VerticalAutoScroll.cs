@@ -4,8 +4,16 @@ using UnityEngine.UI;
 
 namespace Arcadian.UI.Scrolling
 {
+    /// <summary>
+    /// A Unity component extending AbstractAutoScroll that automatically scrolls vertically to keep a selected UI element within view. It adjusts the content position based on the selected element’s bounds relative to the viewport and uses smooth coroutine-based motion for transitions.
+    /// </summary>
     public class VerticalAutoScroll : AbstractAutoScroll
     {
+        /// <summary>
+        /// Once a <c>Selectable</c> is selected, this function is run.
+        /// Used to run the AutoScroll function.
+        /// </summary>
+        /// <param name="selectedGameObject">Object which is selected.</param>
         public override void Select(GameObject selectedGameObject)
         {
             var rectTransform = selectedGameObject.transform as RectTransform;

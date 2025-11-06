@@ -3,8 +3,16 @@ using NotImplementedException = System.NotImplementedException;
 
 namespace Arcadian.UI.Scrolling
 {
+    /// <summary>
+    /// A component extending AbstractAutoScroll that automatically scrolls horizontally to keep a selected UI element within view. It adjusts the content position based on the selected element’s bounds relative to the viewport and uses smooth coroutine-based motion for transitions.
+    /// </summary>
     public class HorizontalAutoScroll : AbstractAutoScroll
     {
+        /// <summary>
+        /// Once a <c>Selectable</c> is selected, this function is run.
+        /// Used to run the AutoScroll function.
+        /// </summary>
+        /// <param name="selectedGameObject">Object which is selected.</param>
         public override void Select(GameObject selectedGameObject)
         {
             var rectTransform = selectedGameObject.transform as RectTransform;
@@ -28,7 +36,6 @@ namespace Arcadian.UI.Scrolling
             // Right of Rect
             if (rightObj + offset > rightView)
             {
-                Debug.Log("A");
                 var diff = rightObj + offset - rightView;
                 var contentLocalPos = content.localPosition;
                 contentLocalPos.x -= diff;
@@ -40,7 +47,6 @@ namespace Arcadian.UI.Scrolling
             // Left of Rect
             if (leftObj + offset < leftView)
             {
-                Debug.Log("B");
                 var diff = leftObj + offset - leftView;
                 var contentLocalPos = content.localPosition;
                 contentLocalPos.x -= diff;

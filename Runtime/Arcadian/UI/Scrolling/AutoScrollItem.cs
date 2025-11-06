@@ -4,11 +4,18 @@ using UnityEngine.Serialization;
 
 namespace Arcadian.UI.Scrolling
 {
-    public class AutoScrollItem : MonoBehaviour, ISelectHandler
+    /// <summary>
+    /// Automatically assigned to <c>Selectable</c> children to invoke the scroll animations.
+    /// </summary>
+    [AddComponentMenu("")]  // Hide from the 'Add Component' Menu
+    internal class AutoScrollItem : MonoBehaviour, ISelectHandler
     {
-        public AbstractAutoScroll autoScroll;
+        internal AbstractAutoScroll autoScroll;
         
-        public void OnSelect(BaseEventData eventData)
+        /// <summary>
+        /// When this item is selected, tell the AutoScroll to move.
+        /// </summary>
+        public void OnSelect(BaseEventData _)
         {
             autoScroll.Select(gameObject);
         }
