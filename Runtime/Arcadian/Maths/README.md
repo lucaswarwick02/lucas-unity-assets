@@ -2,6 +2,31 @@
 
 > Click [here](../../../README.md#features) to go back.
 
+## `ArcMaths`
+
+A static utility class providing reusable mathematical helpers for Unity, including random signed values and spatial point generation.
+
+Example Usage:
+
+```c#
+using Arcadian.Maths;
+using UnityEngine;
+
+public class SpawnPointsDemo : MonoBehaviour
+{
+    public float radius = 5f;
+    public int count = 20;
+
+    void Start()
+    {
+        var points = ArcMaths.PointsInRadius2D(transform.position, radius, count);
+        foreach (var p in points)
+            Debug.DrawLine(transform.position, p, Color.cyan, 5f);
+    }
+}
+
+```
+
 ## `Curves`
 
 A lightweight static helper providing reusable Unity `AnimationCurve` presets for common "ease in" and "ease out" transitions. Useful for animations, UI effects, or smooth value interpolation without manually defining curves each time.
