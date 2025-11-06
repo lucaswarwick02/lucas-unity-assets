@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 namespace Arcadian.Extensions
 {

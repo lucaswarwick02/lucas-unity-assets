@@ -66,7 +66,7 @@ public class Example : MonoBehaviour
 
 ## `MonoBehaviour`
 
-A set of `MonoBehaviour` extension methods for timing and scheduling actions. Useful for invoking callbacks at the end of a frame.
+A set of `MonoBehaviour` extension methods for timing and scheduling actions. Useful for invoking callbacks at the end of a frame, or running basic tweens.
 
 Example Usage:
 ```c#

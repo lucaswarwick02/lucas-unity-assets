@@ -35,5 +35,25 @@ namespace Arcadian.Extensions
 
             return closest;
         }
+
+        /// <summary>
+        /// Destroy all the children of a transform.
+        /// </summary>
+        /// <param name="transform">Transform who's children are to be destroyed.</param>
+        /// <param name="immediate">Whether to use DestroyImmediate, or Destroy.</param>
+        public static void DestroyChildren(this Transform transform, bool immediate = false)
+        {
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                if (immediate)
+                {
+                    Object.DestroyImmediate(transform.GetChild(i).gameObject);
+                }
+                else
+                {
+                    Object.Destroy(transform.GetChild(i).gameObject);
+                }
+            }
+        }
     }
 }

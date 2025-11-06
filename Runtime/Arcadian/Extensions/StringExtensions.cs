@@ -50,6 +50,19 @@ namespace Arcadian.Extensions
         }
 
         /// <summary>
+        /// Cast a hex color to a UnityEngine.Color object. If invalid, returns white.
+        /// </summary>
+        /// <param name="text">Hex string to parse.</param>
+        /// <returns>Parsed color.</returns>
+        public static Color ToColor(this string text)
+        {
+            if (ColorUtility.TryParseHtmlString(text, out var c)) return c;
+
+            Debug.LogWarning($"[Arcadian] Tried to parse '{text}' to a Color, but failed. Returning white.");
+            return UnityEngine.Color.white;
+        }
+
+        /// <summary>
         /// Use rich text tags to set the size of text.
         /// </summary>
         /// <param name="text">Target text to wrap.</param>
