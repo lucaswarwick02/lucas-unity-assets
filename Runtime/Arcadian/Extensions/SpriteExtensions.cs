@@ -215,7 +215,7 @@ namespace Arcadian.Extensions
         /// <param name="pixelsPerUnit">Pixels per unit for created sprites (defaults to 100).</param>
         /// <param name="pivot">Optional pivot point for created sprites (defaults to Unity’s (0.5, 0.5)).</param>
         /// <returns>List of rows, each row is a list of Sprites (empty rows are omitted).</returns>
-        public static List<List<Sprite>> DivideSpriteSheet(Sprite sheet, int rows, int columns, int pixelsPerUnit = 100, Vector2? pivot = null)
+        public static List<List<Sprite>> DivideSpriteSheet(this Sprite sheet, int rows, int columns, int pixelsPerUnit = 100, Vector2? pivot = null)
         {
             var result = new List<List<Sprite>>();
             if (sheet == null || rows <= 0 || columns <= 0)
