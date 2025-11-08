@@ -15,7 +15,8 @@ A collection of shared Unity tools and utilities for internal projects.
         "scopes": [
             "com.solidalloy",
             "com.openupm",
-            "org.nuget"
+            "org.nuget",
+            "com.dbrizov"
         ]
     }
 ],
