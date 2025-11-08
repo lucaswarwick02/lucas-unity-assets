@@ -105,5 +105,100 @@ namespace Arcadian.Extensions
             var pivot = new Vector2(sprite.pivot.x / rect.width, sprite.pivot.y / rect.height);
             return Sprite.Create(newTexture, new Rect(0, 0, width, height), pivot, sprite.pixelsPerUnit);
         }
+
+        /// <summary>
+        /// Adds a one-pixel outline around opaque pixels in the sprite.
+        /// </summary>
+        /// <param name="sprite">Source sprite whose texture rect will be used as the base for the outline.</param>
+        /// <param name="outlineColor">Color of the outline to draw (alpha will be used as-is).</param>
+        /// <param name="cutCorners">If <c>true</c>, only orthogonal neighbours are considered (4-neighbour outline). If <c>false</c> (default), all 8 neighbours are considered.</param>
+        /// <returns>A new <see cref="Sprite"/> with a single-pixel outline applied where transparent pixels neighbour opaque pixels.</returns>
+        /// <remarks>
+        /// The algorithm is optimized for runtime usage: it copies the sprite's texture rect into a flat
+        /// <see cref="Color32"/> buffer, then scans only transparent pixels and checks their neighbours
+        /// for any opaque pixel. If any neighbour is opaque the transparent pixel becomes the outline color.
+        /// Existing opaque pixels are preserved. The returned sprite is created from a new <see cref="Texture2D"/>.
+        /// </remarks>
+        public static Sprite AddOutline(this Sprite sprite, Color32 outlineColor, bool cutCorners = false)
+        {
+            var rect = sprite.textureRect;
+            int width = (int)rect.width, height = (int)rect.height;
+            var srcPixels = sprite.texture.GetPixels32();
+            int texWidth = sprite.texture.width;
+
+            // Copy sprite rect into a compact buffer
+            var pixels = new Color32[width * height];
+            for (int y = 0; y < height; y++)
+            {
+                Array.Copy(srcPixels, ((int)rect.y + y) * texWidth + (int)rect.x, pixels, y * width, width);
+            }
+
+            // Output buffer starts as a copy of the original pixels; we'll set outline pixels into it
+            var outPixels = new Color32[width * height];
+            Array.Copy(pixels, outPixels, pixels.Length);
+
+            // helper to check if a pixel is opaque (alpha > 0)
+            static bool IsOpaque(in Color32 c) => c.a != 0;
+
+            // Check transparent pixels only; if any neighbour (4 or 8 depending on cutCorners) is opaque set outline color
+            for (int y = 0; y < height; y++)
+            {
+                int row = y * width;
+                for (int x = 0; x < width; x++)
+                {
+                    int idx = row + x;
+                    if (IsOpaque(pixels[idx])) continue; // preserve existing opaque
+
+                    bool neighbourOpaque = false;
+
+                    if (cutCorners)
+                    {
+                        // 4-neighbour check (up, down, left, right)
+                        if (x > 0 && IsOpaque(pixels[idx - 1])) neighbourOpaque = true;
+                        else if (x < width - 1 && IsOpaque(pixels[idx + 1])) neighbourOpaque = true;
+                        else if (y > 0 && IsOpaque(pixels[idx - width])) neighbourOpaque = true;
+                        else if (y < height - 1 && IsOpaque(pixels[idx + width])) neighbourOpaque = true;
+                    }
+                    else
+                    {
+                        // 8-neighbour check (including diagonals)
+                        int y0 = Math.Max(0, y - 1);
+                        int y1 = Math.Min(height - 1, y + 1);
+                        int x0 = Math.Max(0, x - 1);
+                        int x1 = Math.Min(width - 1, x + 1);
+
+                        for (int ny = y0; ny <= y1 && !neighbourOpaque; ny++)
+                        {
+                            int nRow = ny * width;
+                            for (int nx = x0; nx <= x1; nx++)
+                            {
+                                if (nx == x && ny == y) continue;
+                                if (IsOpaque(pixels[nRow + nx]))
+                                {
+                                    neighbourOpaque = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (neighbourOpaque)
+                    {
+                        outPixels[idx] = outlineColor;
+                    }
+                }
+            }
+
+            var newTexture = new Texture2D(width, height)
+            {
+                filterMode = sprite.texture.filterMode,
+                wrapMode = sprite.texture.wrapMode
+            };
+            newTexture.SetPixels32(outPixels);
+            newTexture.Apply();
+
+            var pivot = new Vector2(sprite.pivot.x / rect.width, sprite.pivot.y / rect.height);
+            return Sprite.Create(newTexture, new Rect(0, 0, width, height), pivot, sprite.pixelsPerUnit);
+        }
     }
 }
