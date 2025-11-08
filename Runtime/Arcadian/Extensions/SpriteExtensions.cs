@@ -200,5 +200,92 @@ namespace Arcadian.Extensions
             var pivot = new Vector2(sprite.pivot.x / rect.width, sprite.pivot.y / rect.height);
             return Sprite.Create(newTexture, new Rect(0, 0, width, height), pivot, sprite.pixelsPerUnit);
         }
+
+        /// <summary>
+        /// Divides a sprite sheet into a 2D list of sprites (rows x columns).
+        /// Only non-empty cells (pixels with alpha &gt; 0.01) are included.
+        /// Notes:
+        /// - The texture used by the sprite must be Read/Write enabled in import settings for pixel checks to work.
+        /// - If the texture is not readable, the function will still create sprites but will not be able to detect emptiness and will include the cell.
+        /// </summary>
+        /// <param name="sheet">Source sprite (texture) containing the sheet.</param>
+        /// <param name="rows">Number of rows to divide into (vertical slices).</param>
+        /// <param name="columns">Number of columns to divide into (horizontal slices).</param>
+        /// <param name="pixelsPerUnit">Pixels per unit for created sprites (defaults to 100).</param>
+        /// <param name="pivot">Optional pivot point for created sprites (defaults to Unity’s (0.5, 0.5)).</param>
+        /// <returns>List of rows, each row is a list of Sprites (empty rows are omitted).</returns>
+        public static List<List<Sprite>> DivideSpriteSheet(Sprite sheet, int rows, int columns, int pixelsPerUnit = 100, Vector2? pivot = null)
+        {
+            var result = new List<List<Sprite>>();
+            if (sheet == null || rows <= 0 || columns <= 0)
+                return result;
+
+            Texture2D tex = sheet.texture;
+            if (tex == null)
+                return result;
+
+            int texW = tex.width;
+            int texH = tex.height;
+
+            int cellW = texW / columns;
+            int cellH = texH / rows;
+
+            if (cellW <= 0 || cellH <= 0)
+                return result;
+
+            Vector2 actualPivot = pivot ?? new Vector2(0.5f, 0.5f);
+
+            bool readable = tex.isReadable;
+            Color[] allPixels = readable ? tex.GetPixels() : null;
+
+            for (int r = 0; r < rows; r++)
+            {
+                var rowList = new List<Sprite>();
+                for (int c = 0; c < columns; c++)
+                {
+                    int x = c * cellW;
+                    int y = r * cellH;
+
+                    int w = (c == columns - 1) ? texW - x : cellW;
+                    int h = (r == rows - 1) ? texH - y : cellH;
+
+                    if (w <= 0 || h <= 0)
+                        continue;
+
+                    bool hasVisible = true;
+                    if (readable)
+                    {
+                        hasVisible = false;
+                        int yEnd = y + h;
+                        int xEnd = x + w;
+                        for (int yy = y; yy < yEnd; yy++)
+                        {
+                            int rowOffset = yy * texW;
+                            for (int xx = x; xx < xEnd; xx++)
+                            {
+                                if (allPixels[rowOffset + xx].a > 0.01f)
+                                {
+                                    hasVisible = true;
+                                    goto FoundVisible; // break both loops fast
+                                }
+                            }
+                        }
+                    }
+                FoundVisible:
+
+                    if (!hasVisible)
+                        continue;
+
+                    Rect rect = new Rect(x, y, w, h);
+                    Sprite s = Sprite.Create(tex, rect, actualPivot, pixelsPerUnit);
+                    rowList.Add(s);
+                }
+
+                if (rowList.Count > 0)
+                    result.Add(rowList);
+            }
+
+            return result;
+        }
     }
 }
