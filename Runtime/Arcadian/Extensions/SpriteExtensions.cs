@@ -108,6 +108,50 @@ namespace Arcadian.Extensions
         }
 
         /// <summary>
+        /// Convert the sprite so that all pixels with alpha greater than <c>alphaThreshold</c> become the provided <c>color</c>,
+        /// and all other pixels become clear (transparent).
+        /// </summary>
+        /// <param name="sprite">Source sprite whose texture rect will be processed.</param>
+        /// <param name="color">Target color to apply to pixels above the threshold.</param>
+        /// <param name="alphaThreshold">Alpha threshold in range [0,1]. Pixels with alpha &gt; threshold become <paramref name="color"/>. Default is 0.5.</param>
+        /// <returns>A new <see cref="Sprite"/> with converted pixels.</returns>
+        public static Sprite ToColor(this Sprite sprite, Color32 color, float alphaThreshold = 0.5f)
+        {
+            var rect = sprite.textureRect;
+            int width = (int)rect.width, height = (int)rect.height;
+            var srcPixels = sprite.texture.GetPixels32();
+            int texWidth = sprite.texture.width;
+
+            // Copy sprite rect into a compact buffer
+            var pixels = new Color32[width * height];
+            for (int y = 0; y < height; y++)
+            {
+                Array.Copy(srcPixels, ((int)rect.y + y) * texWidth + (int)rect.x, pixels, y * width, width);
+            }
+
+            // Convert pixels based on alpha threshold
+            byte thresh = (byte)Mathf.Clamp(Mathf.RoundToInt(alphaThreshold * 255f), 0, 255);
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                if (pixels[i].a > thresh)
+                    pixels[i] = color;
+                else
+                    pixels[i] = Color.clear;
+            }
+
+            var newTexture = new Texture2D(width, height)
+            {
+                filterMode = sprite.texture.filterMode,
+                wrapMode = sprite.texture.wrapMode
+            };
+            newTexture.SetPixels32(pixels);
+            newTexture.Apply();
+
+            var pivot = new Vector2(sprite.pivot.x / rect.width, sprite.pivot.y / rect.height);
+            return Sprite.Create(newTexture, new Rect(0, 0, width, height), pivot, sprite.pixelsPerUnit);
+        }
+
+        /// <summary>
         /// Adds a one-pixel outline around opaque pixels in the sprite.
         /// </summary>
         /// <param name="sprite">Source sprite whose texture rect will be used as the base for the outline.</param>
