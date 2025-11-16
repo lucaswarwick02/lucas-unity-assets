@@ -82,7 +82,7 @@ namespace Arcadian.Animation
 
         private void Awake()
         {
-            if (playOnStart) SetSprite(sprites[0]);
+            if (playOnStart && sprites != null && sprites.Length > 0) SetSprite(sprites[0]);
         }
 
         private void Start()
@@ -114,6 +114,8 @@ namespace Arcadian.Animation
 
         private IEnumerator PlayCoroutine()
         {
+            if (sprites == null || sprites.Length == 0) yield break;
+
             do
             {
                 foreach (var sprite in sprites)
@@ -123,14 +125,15 @@ namespace Arcadian.Animation
                     OnFrameChange?.Invoke();
 
                     yield return useUnscaledTime ? new WaitForSecondsRealtime(frameDelay) : new WaitForSeconds(frameDelay);
+                }
 
-                    OnAnimationFinished?.Invoke();
+                // Called once per completed cycle
+                OnAnimationFinished?.Invoke();
 
-                    if (destroyOnFinish)
-                    {
-                        Destroy(gameObject);
-                        yield break;
-                    }
+                if (destroyOnFinish)
+                {
+                    Destroy(gameObject);
+                    yield break;
                 }
             } while (loop);
         }
