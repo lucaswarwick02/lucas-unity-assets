@@ -152,19 +152,14 @@ namespace Arcadian.Extensions
         }
 
         /// <summary>
-        /// Adds a one-pixel outline around opaque pixels in the sprite.
+        /// Adds a pixel outline to a sprite, expanding the texture bounds to ensure outlines appear even at edges.
         /// </summary>
-        /// <param name="sprite">Source sprite whose texture rect will be used as the base for the outline.</param>
-        /// <param name="outlineColor">Color of the outline to draw (alpha will be used as-is).</param>
-        /// <param name="cutCorners">If <c>true</c>, only orthogonal neighbours are considered (4-neighbour outline). If <c>false</c> (default), all 8 neighbours are considered.</param>
-        /// <returns>A new <see cref="Sprite"/> with a single-pixel outline applied where transparent pixels neighbour opaque pixels.</returns>
-        /// <remarks>
-        /// The algorithm is optimized for runtime usage: it copies the sprite's texture rect into a flat
-        /// <see cref="Color32"/> buffer, then scans only transparent pixels and checks their neighbours
-        /// for any opaque pixel. If any neighbour is opaque the transparent pixel becomes the outline color.
-        /// Existing opaque pixels are preserved. The returned sprite is created from a new <see cref="Texture2D"/>.
-        /// </remarks>
-        public static Sprite AddOutline(this Sprite sprite, Color32 outlineColor, bool cutCorners = false)
+        /// <param name="sprite">The source sprite to add an outline to.</param>
+        /// <param name="outlineColor">The color to use for the outline.</param>
+        /// <param name="cutCorners">If true, uses 4-neighbour outline (cross pattern). If false, uses 8-neighbour (including diagonals).</param>
+        /// <param name="alphaThreshold">Alpha value below which pixels are treated as transparent. Allows semi-transparent pixels to be ignored.</param>
+        /// <returns>A new sprite with the outline applied.</returns>
+        public static Sprite AddOutline(Sprite sprite, Color32 outlineColor, bool cutCorners = false, byte alphaThreshold = 0)
         {
             var rect = sprite.textureRect;
             int width = (int)rect.width, height = (int)rect.height;
@@ -178,47 +173,58 @@ namespace Arcadian.Extensions
                 Array.Copy(srcPixels, ((int)rect.y + y) * texWidth + (int)rect.x, pixels, y * width, width);
             }
 
-            // Output buffer starts as a copy of the original pixels; we'll set outline pixels into it
-            var outPixels = new Color32[width * height];
-            Array.Copy(pixels, outPixels, pixels.Length);
-
-            // helper to check if a pixel is opaque (alpha > 0)
-            static bool IsOpaque(in Color32 c) => c.a != 0;
-
-            // Check transparent pixels only; if any neighbour (4 or 8 depending on cutCorners) is opaque set outline color
+            // Create expanded buffer with 1 pixel padding on all sides
+            int expandedWidth = width + 2;
+            int expandedHeight = height + 2;
+            var expandedPixels = new Color32[expandedWidth * expandedHeight];
+            
+            // Copy original pixels into center of expanded buffer
             for (int y = 0; y < height; y++)
             {
-                int row = y * width;
-                for (int x = 0; x < width; x++)
+                Array.Copy(pixels, y * width, expandedPixels, (y + 1) * expandedWidth + 1, width);
+            }
+
+            // Output buffer starts as a copy of the expanded pixels
+            var outPixels = new Color32[expandedWidth * expandedHeight];
+            Array.Copy(expandedPixels, outPixels, expandedPixels.Length);
+
+            // helper to check if a pixel is opaque (alpha > threshold)
+            bool IsOpaque(in Color32 c) => c.a > alphaThreshold;
+
+            // Check transparent pixels only; if any neighbour (4 or 8 depending on cutCorners) is opaque set outline color
+            for (int y = 0; y < expandedHeight; y++)
+            {
+                int row = y * expandedWidth;
+                for (int x = 0; x < expandedWidth; x++)
                 {
                     int idx = row + x;
-                    if (IsOpaque(pixels[idx])) continue; // preserve existing opaque
+                    if (IsOpaque(expandedPixels[idx])) continue; // preserve existing opaque
 
                     bool neighbourOpaque = false;
 
                     if (cutCorners)
                     {
                         // 4-neighbour check (up, down, left, right)
-                        if (x > 0 && IsOpaque(pixels[idx - 1])) neighbourOpaque = true;
-                        else if (x < width - 1 && IsOpaque(pixels[idx + 1])) neighbourOpaque = true;
-                        else if (y > 0 && IsOpaque(pixels[idx - width])) neighbourOpaque = true;
-                        else if (y < height - 1 && IsOpaque(pixels[idx + width])) neighbourOpaque = true;
+                        if (x > 0 && IsOpaque(expandedPixels[idx - 1])) neighbourOpaque = true;
+                        else if (x < expandedWidth - 1 && IsOpaque(expandedPixels[idx + 1])) neighbourOpaque = true;
+                        else if (y > 0 && IsOpaque(expandedPixels[idx - expandedWidth])) neighbourOpaque = true;
+                        else if (y < expandedHeight - 1 && IsOpaque(expandedPixels[idx + expandedWidth])) neighbourOpaque = true;
                     }
                     else
                     {
                         // 8-neighbour check (including diagonals)
                         int y0 = Math.Max(0, y - 1);
-                        int y1 = Math.Min(height - 1, y + 1);
+                        int y1 = Math.Min(expandedHeight - 1, y + 1);
                         int x0 = Math.Max(0, x - 1);
-                        int x1 = Math.Min(width - 1, x + 1);
+                        int x1 = Math.Min(expandedWidth - 1, x + 1);
 
                         for (int ny = y0; ny <= y1 && !neighbourOpaque; ny++)
                         {
-                            int nRow = ny * width;
+                            int nRow = ny * expandedWidth;
                             for (int nx = x0; nx <= x1; nx++)
                             {
                                 if (nx == x && ny == y) continue;
-                                if (IsOpaque(pixels[nRow + nx]))
+                                if (IsOpaque(expandedPixels[nRow + nx]))
                                 {
                                     neighbourOpaque = true;
                                     break;
@@ -234,7 +240,7 @@ namespace Arcadian.Extensions
                 }
             }
 
-            var newTexture = new Texture2D(width, height)
+            var newTexture = new Texture2D(expandedWidth, expandedHeight)
             {
                 filterMode = sprite.texture.filterMode,
                 wrapMode = sprite.texture.wrapMode
@@ -242,8 +248,9 @@ namespace Arcadian.Extensions
             newTexture.SetPixels32(outPixels);
             newTexture.Apply();
 
-            var pivot = new Vector2(sprite.pivot.x / rect.width, sprite.pivot.y / rect.height);
-            return Sprite.Create(newTexture, new Rect(0, 0, width, height), pivot, sprite.pixelsPerUnit);
+            // Adjust pivot: add 1 pixel offset to account for the expansion, then normalize to 0-1
+            var newPivot = new Vector2((sprite.pivot.x + 1) / expandedWidth, (sprite.pivot.y + 1) / expandedHeight);
+            return Sprite.Create(newTexture, new Rect(0, 0, expandedWidth, expandedHeight), newPivot, sprite.pixelsPerUnit);
         }
 
         /// <summary>
