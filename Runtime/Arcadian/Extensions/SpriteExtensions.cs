@@ -159,7 +159,7 @@ namespace Arcadian.Extensions
         /// <param name="cutCorners">If true, uses 4-neighbour outline (cross pattern). If false, uses 8-neighbour (including diagonals).</param>
         /// <param name="alphaThreshold">Alpha value below which pixels are treated as transparent. Allows semi-transparent pixels to be ignored.</param>
         /// <returns>A new sprite with the outline applied.</returns>
-        public static Sprite AddOutline(Sprite sprite, Color32 outlineColor, bool cutCorners = false, byte alphaThreshold = 0)
+        public static Sprite AddOutline(this Sprite sprite, Color32 outlineColor, bool cutCorners = false, byte alphaThreshold = 0)
         {
             var rect = sprite.textureRect;
             int width = (int)rect.width, height = (int)rect.height;
