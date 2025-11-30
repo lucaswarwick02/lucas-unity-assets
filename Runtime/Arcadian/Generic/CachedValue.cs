@@ -1,6 +1,6 @@
 using System;
 
-namespace Game.Core.Items
+namespace Arcadian.Generic
 {
     /// <summary>
     /// A generic wrapper for lazy-cached values with custom initialization logic.

@@ -1,6 +1,6 @@
 {
   "name": "com.arcadian.arcadian-assets",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "displayName": "Arcadian Assets",
   "description": "Collection of useful files we reuse across games.",
   "unity": "2022.3",
