@@ -67,7 +67,7 @@ namespace Arcadian.Extensions
             }
 
             // One final update with a full duration
-            onUpdate?.Invoke(1);
+            onUpdate?.Invoke(curve.Evaluate(1f));
 
             // Finally invoke the completion action
             onComplete?.Invoke();
