@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor
+namespace LucasWarwick02.UnityAssets.Editor
 {
     public class RemoveMissingSceneScripts : EditorWindow 
     {
@@ -12,7 +12,7 @@ namespace Editor
 
         private static bool _bHaveRun;
 
-        [MenuItem("Arcadian Assets/Remove Missing Scene Scripts")]
+        [MenuItem("Lucas's Unity Assets/Remove Missing Scene Scripts")]
         public static void ShowWindow()
         {
             GetWindow(typeof(RemoveMissingSceneScripts));
@@ -69,7 +69,7 @@ namespace Editor
                     t = t.parent;
                 }
                 
-                Debug.Log ($"{s} has a missing script at {i}", g);
+                Debug.Log ($"[Lucas's Unity Assets] {s} has a missing script at {i}", g);
                 
                 var serializedObject = new SerializedObject(g);
                 

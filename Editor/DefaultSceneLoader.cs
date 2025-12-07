@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Editor
+namespace LucasWarwick02.UnityAssets.Editor
 {
 #if UNITY_EDITOR
     using UnityEditor;
@@ -20,7 +20,7 @@ namespace Editor
             }
         }
 
-        [MenuItem("Arcadian Assets/Toggle Default Scene Loader %#d", false, 1)]
+        [MenuItem("Lucas's Unity Assets/Toggle Default Scene Loader %#d", false, 1)]
         private static void ToggleDefaultSceneLoader()
         {
             var isEnabled = EditorPrefs.GetBool(ToggleKey, true);
@@ -30,21 +30,21 @@ namespace Editor
             if (isEnabled)
             {
                 EditorApplication.playModeStateChanged += LoadDefaultScene;
-                Debug.Log("Default Scene Loader enabled");
+                Debug.Log("[Lucas's Unity Assets] Default Scene Loader enabled");
             }
             else
             {
                 EditorApplication.playModeStateChanged -= LoadDefaultScene;
-                Debug.Log("Default Scene Loader disabled");
+                Debug.Log("[Lucas's Unity Assets] Default Scene Loader disabled");
             }
             
-            Menu.SetChecked("Arcadian Assets/Toggle Default Scene Loader", isEnabled);
+            Menu.SetChecked("Lucas's Unity Assets/Toggle Default Scene Loader", isEnabled);
         }
 
-        [MenuItem("Tools/Toggle Default Scene Loader", true)]
+        [MenuItem("Lucas's Unity Assets/Toggle Default Scene Loader", true)]
         private static bool ToggleDefaultSceneLoaderValidate()
         {
-            Menu.SetChecked("Tools/Toggle Default Scene Loader", EditorPrefs.GetBool(ToggleKey, true));
+            Menu.SetChecked("Lucas's Unity Assets/Toggle Default Scene Loader", EditorPrefs.GetBool(ToggleKey, true));
             return true;
         }
 

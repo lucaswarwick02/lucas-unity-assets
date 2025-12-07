@@ -1,0 +1,67 @@
+# Maths
+
+> Click [here](../../../README.md#features) to go back.
+
+## `ArcMaths`
+
+A static utility class providing reusable mathematical helpers for Unity, including random signed values and spatial point generation.
+
+Example Usage:
+
+```c#
+using LucasWarwick02.UnityAssets;
+using UnityEngine;
+
+public class SpawnPointsDemo : MonoBehaviour
+{
+    public float radius = 5f;
+    public int count = 20;
+
+    void Start()
+    {
+        var points = ArcMaths.PointsInRadius2D(transform.position, radius, count);
+        foreach (var p in points)
+            Debug.DrawLine(transform.position, p, Color.cyan, 5f);
+    }
+}
+
+```
+
+## `Curves`
+
+A lightweight static helper providing reusable Unity `AnimationCurve` presets for common "ease in" and "ease out" transitions. Useful for animations, UI effects, or smooth value interpolation without manually defining curves each time.
+
+```c#
+using LucasWarwick02.UnityAssets;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    public Transform target;
+    public float duration = 1f;
+
+    void Start()
+    {
+        StartCoroutine(MoveWithCurve());
+    }
+
+    IEnumerator MoveWithCurve()
+    {
+        Vector3 start = transform.position;
+        Vector3 end = target.position;
+
+        float time = 0f;
+        while (time < duration)
+        {
+            // Smoothly interpolate position using the 'In' curve
+            float t = Curves.In.Evaluate(time / duration);
+            transform.position = Vector3.Lerp(start, end, t);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = end;
+    }
+}
+```
