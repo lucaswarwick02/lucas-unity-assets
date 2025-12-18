@@ -11,6 +11,8 @@ namespace LucasWarwick02.UnityAssets
         void Awake()
         {
             if (!_camera) _camera = Camera.main;
+
+            LateUpdate();
         }
 
         void LateUpdate()
