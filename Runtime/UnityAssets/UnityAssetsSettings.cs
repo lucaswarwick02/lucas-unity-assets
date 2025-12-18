@@ -21,7 +21,7 @@ namespace LucasWarwick02.UnityAssets
         /// <summary>
         /// Type of the developer console, in order for the component to be added.
         /// </summary>
-        [Inherits(typeof(AbstractDeveloperConsole), IncludeAdditionalAssemblies = new[] { "Assembly-CSharp" })]
+        [Inherits(typeof(AbstractDeveloperConsole), ShowAllTypes = true)]
         public TypeReference developerConsoleType;
 
         /// <summary>
