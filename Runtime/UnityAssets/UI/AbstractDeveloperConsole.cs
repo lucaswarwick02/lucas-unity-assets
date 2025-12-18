@@ -224,8 +224,8 @@ namespace LucasWarwick02.UnityAssets
             _previousCommands.Add(text);
             _commandIndex = -1;
 
-            // Split into command and arguments
-            var parts = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            // Parse command and arguments, respecting quoted strings
+            var parts = SplitCommandWithQuotes(text);
             var command = parts[0];
             var args = parts.Skip(1).ToArray();
 
@@ -251,6 +251,40 @@ namespace LucasWarwick02.UnityAssets
             {
                 return ($"Unknown command: {command}", false);
             }
+        }
+
+        private List<string> SplitCommandWithQuotes(string input)
+        {
+            var parts = new List<string>();
+            var current = new System.Text.StringBuilder();
+            bool inQuotes = false;
+
+            foreach (var c in input)
+            {
+                if (c == '"')
+                {
+                    inQuotes = !inQuotes;
+                }
+                else if (c == ' ' && !inQuotes)
+                {
+                    if (current.Length > 0)
+                    {
+                        parts.Add(current.ToString());
+                        current.Clear();
+                    }
+                }
+                else
+                {
+                    current.Append(c);
+                }
+            }
+
+            if (current.Length > 0)
+            {
+                parts.Add(current.ToString());
+            }
+
+            return parts;
         }
 
         private Dictionary<string, Func<string[], string>> AllCommands()
