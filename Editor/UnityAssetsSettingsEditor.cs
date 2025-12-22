@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace LucasWarwick02.UnityAssets.Editor
@@ -42,3 +43,4 @@ namespace LucasWarwick02.UnityAssets.Editor
         }
     }
 }
+#endif
