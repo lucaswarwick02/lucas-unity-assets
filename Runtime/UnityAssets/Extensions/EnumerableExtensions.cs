@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LucasWarwick02.UnityAssets
 {
@@ -58,6 +59,16 @@ namespace LucasWarwick02.UnityAssets
                 pick -= w;
             }
             return items[items.Count - 1];
+        }
+
+        public static string ToDelimitedString<T>(
+            this IEnumerable<T> source,
+            string delimiter = ", ",
+            string start = "{",
+            string end = "}")
+        {
+            if (source == null) return start + end;
+            return start + string.Join(delimiter, source.Select(x => x?.ToString())) + end;
         }
     }
 }

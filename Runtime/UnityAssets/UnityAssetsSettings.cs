@@ -44,6 +44,11 @@ namespace LucasWarwick02.UnityAssets
         /// </summary>
         public TMP_SpriteAsset[] floatingTextEmojiAssets;
 
+        /// <summary>
+        /// Type of your input actions, for use with the InputDeviceTracker system.
+        /// </summary>
+         public InputActionAsset inputActionsType;
+
         private const string AssetName = "UnityAssetsSettings";
         private const string AssetPath = "Assets/Resources/" + AssetName + ".asset";
 

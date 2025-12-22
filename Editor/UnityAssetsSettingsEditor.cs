@@ -30,9 +30,14 @@ namespace LucasWarwick02.UnityAssets.Editor
                     EditorGUILayout.Space();
                     EditorGUILayout.LabelField("Scene Transitions", EditorStyles.boldLabel);
                     EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(UnityAssetsSettings.sceneTransitionPrefab)));
+                    
                     EditorGUILayout.LabelField("Floating Text", EditorStyles.boldLabel);
                     EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(UnityAssetsSettings.floatingTextFont)));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(UnityAssetsSettings.floatingTextEmojiAssets)));
+
+                    EditorGUILayout.LabelField("Input System", EditorStyles.boldLabel);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(UnityAssetsSettings.inputActionsType)));
+
 
                     serializedObject.ApplyModifiedProperties();
                 },

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,6 +27,11 @@ namespace LucasWarwick02.UnityAssets
         public static InputDeviceType CurrentDevice { get; private set; }
 
         /// <summary>
+        /// The currently active PlayerInput control scheme.
+        /// </summary>
+        public static string CurrentScheme { get; private set; }
+
+        /// <summary>
         /// Raised whenever the active input device type changes.
         /// </summary>
         public static event System.Action<InputDeviceType> DeviceChanged;
@@ -37,6 +44,9 @@ namespace LucasWarwick02.UnityAssets
         private static void Bootstrap()
         {
             if (HasInstance)
+                return;
+
+            if (UnityAssetsSettings.GetOrCreate().inputActionsType == null)
                 return;
 
             var go = new GameObject("[Lucas's Unity Assets] Input Device Tracker");
@@ -68,12 +78,10 @@ namespace LucasWarwick02.UnityAssets
 
         private static void SetInitialDevice()
         {
-            // Priority: Gamepad > Keyboard & Mouse
             if (Gamepad.current != null)
                 SetDevice(InputDeviceType.Gamepad);
             else if (Keyboard.current != null || Mouse.current != null)
                 SetDevice(InputDeviceType.KeyboardMouse);
-
         }
 
         private static void OnActionChange(object obj, InputActionChange change)
@@ -81,28 +89,82 @@ namespace LucasWarwick02.UnityAssets
             if (change != InputActionChange.ActionStarted)
                 return;
 
-            if (obj is not InputAction action)
+            if (obj is not InputAction action || action.activeControl == null)
                 return;
 
-            var control = action.activeControl;
-            if (control == null)
-                return;
-
-            var device = control.device;
-
+            var device = action.activeControl.device;
             if (device is Gamepad)
                 SetDevice(InputDeviceType.Gamepad);
             else if (device is Keyboard || device is Mouse)
                 SetDevice(InputDeviceType.KeyboardMouse);
+
+            var playerInput = FindObjectOfType<PlayerInput>();
+            if (playerInput != null)
+                CurrentScheme = playerInput.currentControlScheme;
+        }
+
+        private static string[] GetDeviceStrings(InputDeviceType inputDeviceType)
+        {
+            return inputDeviceType switch
+            {
+                InputDeviceType.KeyboardMouse => new string[2] { "Mouse", "Keyboard" },
+                InputDeviceType.Gamepad => new string[1] { "Gamepad" },
+                _ => throw new System.NotImplementedException(),
+            };
+        }
+
+        private static string InferControlScheme()
+        {
+            var controlSchemes = UnityAssetsSettings.GetOrCreate().inputActionsType.controlSchemes;
+            if (controlSchemes.Count == 0)
+                return null;
+
+            var requiredDevices = new HashSet<string>(GetDeviceStrings(CurrentDevice));
+            
+            foreach(var controlScheme in controlSchemes)
+            {
+                if (controlScheme.deviceRequirements.All(req => requiredDevices.Any(device => req.controlPath.Contains(device))))
+                {
+                    return controlScheme.name;
+                }
+            }
+
+            return null;
         }
 
         private static void SetDevice(InputDeviceType device)
         {
-            if (CurrentDevice == device)
+            if (CurrentDevice == device && CurrentScheme != null)
                 return;
 
             CurrentDevice = device;
+            CurrentScheme = InferControlScheme();
             DeviceChanged?.Invoke(device);
+        }
+    }
+
+    public static class InputActionExtensions
+    {
+        /// <summary>
+        /// Gets the display string for the current control scheme's binding.
+        /// </summary>
+        /// <param name="inputAction">The input action to get the binding string for.</param>
+        /// <returns>A formatted string representing the binding, or an empty string if no matching binding is found.</returns>
+        public static string GetBindingString(this InputAction inputAction)
+        {
+            var display = inputAction.bindings.FirstOrDefault(b => b.groups.Equals(InputDeviceTracker.CurrentScheme)).ToDisplayString();
+            var mappings = new Dictionary<string, string>
+            {
+                { "D-Pad/Down", "D-Pad ↓" },
+                { "D-Pad/Up", "D-Pad ↑" },
+                { "D-Pad/Left", "D-Pad ←" },
+                { "D-Pad/Right", "D-Pad →" },
+            };
+
+            if (mappings.TryGetValue(display, out var friendly))
+                return friendly;
+
+            return display;
         }
     }
 }
