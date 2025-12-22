@@ -153,13 +153,7 @@ namespace LucasWarwick02.UnityAssets
         public static string GetBindingString(this InputAction inputAction)
         {
             var display = inputAction.bindings.FirstOrDefault(b => b.groups.Equals(InputDeviceTracker.CurrentScheme)).ToDisplayString();
-            var mappings = new Dictionary<string, string>
-            {
-                { "D-Pad/Down", "D-Pad ↓" },
-                { "D-Pad/Up", "D-Pad ↑" },
-                { "D-Pad/Left", "D-Pad ←" },
-                { "D-Pad/Right", "D-Pad →" },
-            };
+            var mappings = new Dictionary<string, string>{};
 
             if (mappings.TryGetValue(display, out var friendly))
                 return friendly;
