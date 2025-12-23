@@ -103,7 +103,7 @@ namespace LucasWarwick02.UnityAssets
             newTexture.SetPixels32(pixels);
             newTexture.Apply();
 
-            var pivot = new Vector2(sprite.pivot.x / rect.width, sprite.pivot.y / rect.height);
+            var pivot = new Vector2((sprite.pivot.x - sprite.textureRectOffset.x) / width, (sprite.pivot.y - sprite.textureRectOffset.y) / height);
             return Sprite.Create(newTexture, new Rect(0, 0, width, height), pivot, sprite.pixelsPerUnit);
         }
 
@@ -147,7 +147,7 @@ namespace LucasWarwick02.UnityAssets
             newTexture.SetPixels32(pixels);
             newTexture.Apply();
 
-            var pivot = new Vector2(sprite.pivot.x / rect.width, sprite.pivot.y / rect.height);
+            var pivot = new Vector2((sprite.pivot.x - sprite.textureRectOffset.x) / width, (sprite.pivot.y - sprite.textureRectOffset.y) / height);
             return Sprite.Create(newTexture, new Rect(0, 0, width, height), pivot, sprite.pixelsPerUnit);
         }
 
@@ -248,9 +248,12 @@ namespace LucasWarwick02.UnityAssets
             newTexture.SetPixels32(outPixels);
             newTexture.Apply();
 
-            // Adjust pivot: add 1 pixel offset to account for the expansion, then normalize to 0-1
-            var newPivot = new Vector2((sprite.pivot.x + 1) / expandedWidth, (sprite.pivot.y + 1) / expandedHeight);
-            return Sprite.Create(newTexture, new Rect(0, 0, expandedWidth, expandedHeight), newPivot, sprite.pixelsPerUnit);
+            // Adjust pivot: sprite.pivot is relative to the logical rect. 
+            // Subtract textureRectOffset to get the pivot relative to the extracted pixels,
+            // then add 1 pixel for the padding, then normalize.
+            float px = (sprite.pivot.x - sprite.textureRectOffset.x + 1) / expandedWidth;
+            float py = (sprite.pivot.y - sprite.textureRectOffset.y + 1) / expandedHeight;
+            return Sprite.Create(newTexture, new Rect(0, 0, expandedWidth, expandedHeight), new Vector2(px, py), sprite.pixelsPerUnit);
         }
 
         /// <summary>
