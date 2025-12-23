@@ -70,6 +70,9 @@ namespace LucasWarwick02.UnityAssets
             // Only move the camera if we aren't shaking
             // if (_isShaking) return;
 
+            // Return if no target is present
+            if (target == null) return;
+
             var targetPosition = target.position + offset;
             var currentPosition = transform.position;
 
