@@ -65,7 +65,7 @@ namespace LucasWarwick02.UnityAssets
             _instance = this;
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             // Only move the camera if we aren't shaking
             // if (_isShaking) return;
