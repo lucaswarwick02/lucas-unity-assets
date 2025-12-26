@@ -22,13 +22,13 @@ namespace LucasWarwick02.UnityAssets
 
         public RectTransform RectTransform => transform as RectTransform;
 
-        private Vector3 _base;
-        private Vector3 _target;
+        private Vector3 _target = Vector3.one;
+
+        public bool IsOpen { private set; get;}
 
         protected virtual void Awake()
         {
-            _base = transform.localScale;
-            _target = _base * maxScale;
+            _target = Vector3.one * maxScale;
         }
 
         [Button]
@@ -41,8 +41,10 @@ namespace LucasWarwick02.UnityAssets
             else
             {
                 Canvas.enabled = true;
-                RectTransform.localScale = _base;
+                RectTransform.localScale = Vector3.one;
             }
+
+            IsOpen = true;
         }
 
 
@@ -55,7 +57,8 @@ namespace LucasWarwick02.UnityAssets
             }
 
             Canvas.enabled = false;
-            RectTransform.localScale = _base;
+            RectTransform.localScale = Vector3.one;
+            IsOpen = false;
         }
 
         public void Toggle()
@@ -82,13 +85,13 @@ namespace LucasWarwick02.UnityAssets
                 float t = elapsed / duration;
                 float scale = Curves.Bell.Evaluate(t);
 
-                RectTransform.localScale = Vector3.Lerp(_base, _target, scale);
+                RectTransform.localScale = Vector3.Lerp(Vector3.one, _target, scale);
 
                 elapsed += Time.unscaledDeltaTime;
                 yield return null;
             }
 
-            RectTransform.localScale = _base;
+            RectTransform.localScale = Vector3.one;
         }
     }
 }
