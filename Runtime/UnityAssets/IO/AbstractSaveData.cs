@@ -68,6 +68,8 @@ namespace LucasWarwick02.UnityAssets
             var saveDataString = File.ReadAllText(SaveDataPath());
             Current = StringToSaveData(saveDataString);
 
+            Current.SanityCheck();
+
             Save();
         }
 
@@ -100,5 +102,13 @@ namespace LucasWarwick02.UnityAssets
         /// </summary>
         /// <returns>Name + extension of the file</returns>
         protected abstract string FileName();
+
+        /// <summary>
+        /// Optional sanity check for allowed loaded types, but invalid logic.
+        /// </summary>
+        protected virtual void SanityCheck()
+        {
+            //
+        }
     }
 }
