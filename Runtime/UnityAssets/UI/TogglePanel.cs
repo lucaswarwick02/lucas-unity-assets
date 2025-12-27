@@ -31,7 +31,7 @@ namespace LucasWarwick02.UnityAssets
             _target = Vector3.one * maxScale;
         }
 
-        [Button]
+        [ContextMenu("Open")]
         public virtual void Open()
         {
             if (Application.isPlaying)
@@ -45,20 +45,25 @@ namespace LucasWarwick02.UnityAssets
             }
 
             IsOpen = true;
+
+            if (Application.isPlaying)
+            {
+                OnOpen?.Invoke();
+            }
         }
 
 
-        [Button]
+        [ContextMenu("Close")]
         public virtual void Close()
         {
+            Canvas.enabled = false;
+            RectTransform.localScale = Vector3.one;
+            IsOpen = false;
+
             if (Application.isPlaying)
             {
                 OnClose?.Invoke();
             }
-
-            Canvas.enabled = false;
-            RectTransform.localScale = Vector3.one;
-            IsOpen = false;
         }
 
         public void Toggle()
@@ -76,8 +81,6 @@ namespace LucasWarwick02.UnityAssets
         private IEnumerator Animation()
         {
             Canvas.enabled = true;
-
-            OnOpen?.Invoke();
 
             float elapsed = 0f;
             while (elapsed < duration)
