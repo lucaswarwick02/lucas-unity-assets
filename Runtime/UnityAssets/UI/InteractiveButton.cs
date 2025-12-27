@@ -73,6 +73,8 @@ namespace LucasWarwick02.UnityAssets
         
         public void OnPointerEnter(PointerEventData eventData)
         {
+            if (IsFocused) return;
+
             IsFocused = true;
             enterSFX.Play();
             StartAnimation(targetScale);
@@ -81,6 +83,8 @@ namespace LucasWarwick02.UnityAssets
 
         public void OnSelect(BaseEventData eventData)
         {
+            if (IsFocused) return;
+
             IsFocused = true;
             enterSFX.Play();
             StartAnimation(targetScale);
@@ -89,6 +93,8 @@ namespace LucasWarwick02.UnityAssets
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            if (!IsFocused) return;
+
             IsFocused = false;
             exitSFX.Play();
             StartAnimation(originalScale);
@@ -97,6 +103,8 @@ namespace LucasWarwick02.UnityAssets
 
         public void OnDeselect(BaseEventData eventData)
         {
+            if (!IsFocused) return;
+
             IsFocused = false;
             exitSFX.Play();
             StartAnimation(originalScale);
@@ -105,12 +113,16 @@ namespace LucasWarwick02.UnityAssets
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (!IsFocused) return;
+
             submitSFX.Play();
             OnSubmit(eventData);
         }
 
         public void OnSubmit(BaseEventData eventData)
         {
+            if (!IsFocused) return;
+
             submitSFX.Play();
             OnSubmit();
         }
