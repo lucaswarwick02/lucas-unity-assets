@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace LucasWarwick02.UnityAssets
 {
-    [RequireComponent(typeof(Canvas))]
+    [RequireComponent(typeof(Canvas), typeof(CanvasGroup), typeof(GraphicRaycaster))]
     public class TogglePanel : MonoBehaviour
     {
         [Foldout("Toggle Panel Settings")]
@@ -19,6 +20,9 @@ namespace LucasWarwick02.UnityAssets
 
         private Canvas _canvas;
         public Canvas Canvas => _canvas ? _canvas : _canvas = GetComponent<Canvas>();
+
+        private CanvasGroup _canvasGroup;
+        public CanvasGroup CanvasGroup => _canvasGroup ? _canvasGroup : _canvasGroup = GetComponent<CanvasGroup>();
 
         public RectTransform RectTransform => transform as RectTransform;
 
@@ -34,20 +38,15 @@ namespace LucasWarwick02.UnityAssets
         [ContextMenu("Open")]
         public virtual void Open()
         {
-            if (Application.isPlaying)
-            {
-                StartCoroutine(Animation());
-            }
-            else
-            {
-                Canvas.enabled = true;
-                RectTransform.localScale = Vector3.one;
-            }
+            Canvas.enabled = true;
+            RectTransform.localScale = Vector3.one;
+            CanvasGroup.interactable = true;
 
             IsOpen = true;
 
             if (Application.isPlaying)
             {
+                StartCoroutine(Animation());
                 OnOpen?.Invoke();
             }
         }
@@ -58,7 +57,10 @@ namespace LucasWarwick02.UnityAssets
         {
             Canvas.enabled = false;
             RectTransform.localScale = Vector3.one;
+            CanvasGroup.interactable = false;
+
             IsOpen = false;
+
 
             if (Application.isPlaying)
             {
@@ -80,8 +82,6 @@ namespace LucasWarwick02.UnityAssets
 
         private IEnumerator Animation()
         {
-            Canvas.enabled = true;
-
             float elapsed = 0f;
             while (elapsed < duration)
             {
