@@ -41,13 +41,13 @@ namespace LucasWarwick02.UnityAssets
             gameObject.AddComponent<Image>().color = Color.black;
 
             // Fade image in
-            yield return this.Tween(duration: 0.5f, onUpdate: (t) => canvasGroup.alpha = Mathf.Lerp(0, 1, t));
+            yield return this.Tween(duration: 0.5f, onUpdate: (t) => canvasGroup.alpha = Mathf.Lerp(0, 1, t), useUnscaledTime: true);
 
             // Change scene
             changeScene.Invoke();
 
             // Show user 
-            yield return this.Tween(duration: 0.5f);
+            yield return this.Tween(duration: 0.5f, useUnscaledTime: true);
 
             // Optional: Custom user animation
             GameObject prefab;
@@ -58,7 +58,7 @@ namespace LucasWarwick02.UnityAssets
             }
 
             // Fade image out
-            yield return this.Tween(duration: 0.5f, onUpdate: (t) => canvasGroup.alpha = Mathf.Lerp(1, 0, t));
+            yield return this.Tween(duration: 0.5f, onUpdate: (t) => canvasGroup.alpha = Mathf.Lerp(1, 0, t), useUnscaledTime: true);
 
             Destroy(gameObject);
         }
