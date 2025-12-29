@@ -62,7 +62,7 @@ namespace LucasWarwick02.UnityAssets
 
             while (elapsed < duration)
             {
-                elapsed += Time.deltaTime;
+                elapsed += Time.unscaledDeltaTime;
                 transform.localScale = Vector3.Lerp(origin, target, elapsed / duration);
 
                 yield return null;
